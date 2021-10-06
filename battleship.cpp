@@ -15,15 +15,27 @@ using namespace std;
 int x = 0;
 int y = 0;	
 int player = 0;
-int slct[2] = { 0, 1 };
+
+char pieces[5][7] = {
+	{'<','-','-','0','-','>'},
+	{'<','-','-','-','>'},
+	{'<','-','-','>'},
+	{'<','-','>'},
+	{'<','0','-','0','>'},
+};
 
 battleship::battleship() {
-	
+	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO cursorInfo;
+	GetConsoleCursorInfo(out, &cursorInfo);
+	cursorInfo.bVisible = false;
+	SetConsoleCursorInfo(out, &cursorInfo);
 }
 
 void battleship::bsmain() {
 	initGrid();
 	print();
+	centerShips();
 	move();
 	place_pieces();
 }
@@ -46,19 +58,17 @@ void battleship::initGrid() {
 }
 
 void battleship::print() {
-	cout << "\n\nIt is player " << player + 1 << "'s turn.\n";
-	cout << "|\t| A | B | C | D | E | F | G | H | I | J |\t\t|\t| A | B | C | D | E | F | G | H | I | J |\n|-------|---|---|---|---|---|---|---|---|---|---|\t\t|-------|---|---|---|---|---|---|---|---|---|---|\n";
+	system("cls");
+	highlight("\t\tYour ships.", 10);
+	highlight("\t\t\t PLAYER " + to_string(player % 2 + 1) + "'S TURN", 13);
+	highlight("\t\tTheir ships\n", 12);
+	cout << "-------------------------------------------------\t\t-------------------------------------------------\n|\t| A | B | C | D | E | F | G | H | I | J |\t\t|\t| A | B | C | D | E | F | G | H | I | J |\n|-------|---|---|---|---|---|---|---|---|---|---|\t\t|-------|---|---|---|---|---|---|---|---|---|---|\n";
 	for (int i = 0; i < 10; i++) {
 		cout << "|   " << i + 1 << "\t| ";
 		for (int b1 = 0; b1 < 10; b1++) {
-			if (i == slct[0] && b1 == slct[1]) {
-				highlight(string(1, grid[player][i][b1]), 140);
-				cout << " | ";
-			}
-			else
-				cout << grid[player][i][b1] << " | ";
+			cout << grid[player][i][b1] << " | ";
 		}
-		cout << "\t\t" << "|   " << i + 1 << "\t| ";
+		cout << "\t\t|   " << i + 1 << "\t| ";
 		for (int b2 = 0; b2 < 10; b2++) {
 			cout << grid[player][i][b2] << " | ";
 		}
@@ -81,37 +91,37 @@ void battleship::move() {
 			switch (move) {
 			case KEY_UP:
 				if (y > 0) {
-					setCursorPosition((x * 4) + 10, (y * 2) + 10);
+					setCursorPosition((x * 4) + 10, (y * 2) + 4);
 					cout << grid[player % 2 + 1][x][y];
 					y--;
-					setCursorPosition((x * 4) + 10, (y * 2) + 10);
+					setCursorPosition((x * 4) + 10, (y * 2) + 4);
 					highlight(string(1, grid[player % 2 + 1][x][y]), 240);
 				}
 				break;
 			case KEY_DOWN:
 				if (y < 9) {
-					setCursorPosition((x * 4) + 10, (y * 2) + 10);
+					setCursorPosition((x * 4) + 10, (y * 2) + 4);
 					cout << grid[player % 2 + 1][x][y];
 					y++;
-					setCursorPosition((x * 4) + 10, (y * 2) + 10);
+					setCursorPosition((x * 4) + 10, (y * 2) + 4);
 					highlight(string(1, grid[player % 2 + 1][x][y]), 240);
 				}
 				break;
 			case KEY_LEFT:
 				if (x > 0) {
-					setCursorPosition((x * 4) + 10, (y * 2) + 10);
+					setCursorPosition((x * 4) + 10, (y * 2) + 4);
 					cout << grid[player % 2 + 1][x][y];
 					x--;
-					setCursorPosition((x * 4) + 10, (y * 2) + 10);
+					setCursorPosition((x * 4) + 10, (y * 2) + 4);
 					highlight(string(1, grid[player % 2 + 1][x][y]), 240);
 				}
 				break;
 			case KEY_RIGHT:
 				if (x < 9) {
-					setCursorPosition((x * 4) + 10, (y * 2) + 10);
+					setCursorPosition((x * 4) + 10, (y * 2) + 4);
 					cout << grid[player % 2 + 1][x][y];
 					x++;
-					setCursorPosition((x * 4) + 10, (y * 2) + 10);
+					setCursorPosition((x * 4) + 10, (y * 2) + 4);
 					highlight(string(1, grid[player % 2 + 1][x][y]), 240);
 				}
 				break;
@@ -124,24 +134,33 @@ void battleship::move() {
 	}
 }
 
-void battleship::place_pieces() {
-	// Player presses number 1-5, boat spawns, r to rotate 90 degrees
-	char pieces[5][7] = {
-		{'<','-','-','0','-','>'},
-		{'<','-','-','-','>'},
-		{'<','-','-','>'},
-		{'<','-','>'},
-		{'<','0','-','0','>'},
-	};
-	int x;
-	cout << "Ships:\n1: " << pieces[0] << "\n2: " << pieces[1] << "\n3: " << pieces[2] << "\n4: " << pieces[3] << "\n5: " << pieces[4] << "\n";
-	cin >> x;
-	for (int i = 0; i < 6; i++) {
-		grid[player % 2 + 1][y][x + i] = pieces[x - 1][i];
-		setCursorPosition(((x + i) * 4) + 10, (y * 2) + 10);
-		highlight(string(1, grid[player % 2 + 1][y][x + i]), 50);
+void battleship::centerShips() {
+	setCursorPosition(54, 9);
+	highlight("Ships", 14);
+	for (int i = 0; i < 5; i++) {
+		setCursorPosition(54, 11 + i);
+		highlight(to_string(i+1), 14);
+		cout << " ";
+		highlight(pieces[i], 14);
 	}
-	setCursorPosition(30, 30);
+
+}
+void battleship::place_pieces() {
+	while (1) {
+		// Player presses number 1-5, boat spawns, r to rotate 90 degrees
+		int z;
+		setCursorPosition(0, 24);
+		cin >> z;
+		z--;
+		for (int i = 0; i < sizeof(pieces[z]); i++) {
+			grid[player%2+1][x+i][y] = pieces[z][i];
+			grid[player%2+1][x+i][y] = pieces[z][i];
+			setCursorPosition((x * 4) + 10 + i * 4, y * 2 + 4);
+			highlight(string(1, pieces[z][i]), 14);
+
+		}
+		move();
+	}
 }
 
 battleship::~battleship() {
