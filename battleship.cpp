@@ -15,8 +15,9 @@ using namespace std;
 int x = 0;
 int y = 0;	
 int player = 0;
+int slct[2] = { 0, 1 };
 
-int battleship::bsmain() {
+void battleship::bsmain() {
 	initGrid();
 	print();
 	move();
@@ -39,31 +40,24 @@ void battleship::initGrid() {
 }
 
 void battleship::print() {
-	/*for (int i = 0; i < 10; i++) {
-		cout << "|---|---|---|---|---|---|---|---|---|---|\n| ";
-		for (int j = 0; j < 10; j++) {
-			cout << grid[i][j] << " | ";
-		}
-		cout << endl;
-	}
-	cout << "|---|---|---|---|---|---|---|---|---|---|\n";*/
-	WriteConsoleOutputCharacter("\n\nIt is player " << player + 1 << "'s turn.\n");
+	cout << "\n\nIt is player " << player + 1 << "'s turn.\n";
 	cout << "|\t| A | B | C | D | E | F | G | H | I | J |\t\t|\t| A | B | C | D | E | F | G | H | I | J |\n|-------|---|---|---|---|---|---|---|---|---|---|\t\t|-------|---|---|---|---|---|---|---|---|---|---|\n";
 	for (int i = 0; i < 10; i++) {
-		WriteConsoleOutputCharacter("|   " << i + 1 << "\t| ");
+		cout << "|   " << i + 1 << "\t| ";
 		for (int b1 = 0; b1 < 10; b1++) {
 			if (i == slct[0] && b1 == slct[1]) {
-				highlight(string(1, grid[player][i][b1]));
-				WriteConsoleOutputCharacter(" | ");
+				highlight(string(1, grid[player][i][b1]), 140);
+				cout << " | ";
 			}
 			else
-				WriteConsoleOutputCharacter(grid[player][i][b1] << " | ");
+				cout << grid[player][i][b1] << " | ";
 		}
-		WriteConsoleOutputCharacter("\t\t" << "|   " << i + 1 << "\t| ");
+		cout << "\t\t" << "|   " << i + 1 << "\t| ";
 		for (int b2 = 0; b2 < 10; b2++) {
-			WriteConsoleOutputCharacter(grid[player][i][b2] << " | ");
+			cout << grid[player][i][b2] << " | ";
 		}
-		WriteConsoleOutputCharacter("\n|-------|---|---|---|---|---|---|---|---|---|---|\t\t|-------|---|---|---|---|---|---|---|---|---|---|\n");
+		cout << "\n|-------|---|---|---|---|---|---|---|---|---|---|\t\t|-------|---|---|---|---|---|---|---|---|---|---|\n");
+	}
 }
 
 void battleship::setCursorPosition(int x, int y) {
@@ -94,7 +88,7 @@ void battleship::move() {
 					cout << grid[player % 2 + 1][x][y];
 					y++;
 					setCursorPosition((x * 4) + 2, (y * 2) + 1);
-					highlight(string(1, grid[x][y]), 240);
+					highlight(string(1, grid[player % 2 + 1][x][y]), 240);
 				}
 				break;
 			case KEY_LEFT:
