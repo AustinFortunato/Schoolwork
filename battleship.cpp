@@ -11,6 +11,7 @@ using namespace std;
 #define KEY_DOWN 80
 #define KEY_RIGHT 77
 #define KEY_LEFT 75
+#define KEY_ENTER 13
 
 int x = 0;
 int y = 0;	
@@ -125,7 +126,7 @@ void battleship::move() {
 					highlight(string(1, grid[player % 2 + 1][x][y]), 240);
 				}
 				break;
-			case 13:
+			case KEY_ENTER:
 				setCursorPosition(0, 22);
 				go = false;
 				break;
