@@ -154,11 +154,12 @@ void battleship::place_pieces() {
 		cin >> z;
 		z--;
 		for (int i = 0; i < sizeof(pieces[z]); i++) {
-			grid[player%2+1][x+i][y] = pieces[z][i];
+			while (_getch() == 'r') {
+				cout << "Test";
+			}
 			grid[player%2+1][x+i][y] = pieces[z][i];
 			setCursorPosition((x * 4) + 10 + i * 4, y * 2 + 4);
 			highlight(string(1, pieces[z][i]), 14);
-
 		}
 		move();
 	}
