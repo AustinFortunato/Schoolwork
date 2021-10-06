@@ -12,6 +12,7 @@ public:
 	void place_pieces();
 	void setCursorPosition(int, int);
 	void initGrid();
+	void centerShips();
 	~battleship();
 private:
 protected:
