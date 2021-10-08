@@ -16,6 +16,7 @@ using namespace std;
 int x = 0;
 int y = 0;	
 int player = 0;
+int r = 0;
 
 char pieces[5][7] = {
 	{'<','-','-','0','-','>'},
@@ -31,6 +32,13 @@ battleship::battleship() {
 	GetConsoleCursorInfo(out, &cursorInfo);
 	cursorInfo.bVisible = false;
 	SetConsoleCursorInfo(out, &cursorInfo);
+	for (int k = 0; k < 2; k++) {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				grid[k][i][j] = '*';
+			}
+		}
+	}
 }
 
 void battleship::bsmain() {
@@ -171,20 +179,49 @@ void battleship::centerShips() {
 	}
 
 }
+
 void battleship::place_pieces() {
 	while (1) {
 		// Player presses number 1-5, boat spawns, r to rotate 90 degrees
-		int z;
 		setCursorPosition(0, 24);
+		int z;
+		int eks = x, why = y;
+
 		cin >> z;
 		z--;
-		for (int i = 0; i < sizeof(pieces[z]); i++) {
-			while (_getch() == 'r') {
-				cout << "Test";
+
+		while (_getch() == 'r') {
+			r++;
+			switch (r % 4) {
+			case 0:
+				for (int i = 0; i < sizeof(pieces[z]); i++) {
+					grid[player % 2 + 1][eks + i][why] = pieces[z][i];
+					setCursorPosition((eks * 4) + 10 + i * 4, why * 2 + 4);
+					highlight(string(1, pieces[z][i]), 14);
+				}
+				break;
+			case 1:
+				for (int i = 0; i < sizeof(pieces[z]); i++) {
+					grid[player % 2 + 1][eks][why + i] = pieces[z][i];
+					setCursorPosition(eks * 4 + 10, why * 2 + 4 + i * 2);
+					highlight(string(1, pieces[z][i]), 14);
+				}
+				break;
+			case 2:
+				for (int i = 0; i < sizeof(pieces[z]); i++) {
+					grid[player % 2 + 1][eks - i][why] = pieces[z][i];
+					setCursorPosition(eks * 4 + 10 - 4 * i, why * 2 + 4);
+					highlight(string(1, pieces[z][i]), 14);
+				}
+				break;
+			case 3:
+				for (int i = 0; i < sizeof(pieces[z]); i++) {
+					grid[player % 2 + 1][eks][why - i] = pieces[z][i];
+					setCursorPosition(eks * 4 + 10; why * 2 - i * 2);
+					highlight(string(1, pieces[z][i]), 14);
+				}
+				break;
 			}
-			grid[player%2+1][x+i][y] = pieces[z][i];
-			setCursorPosition((x * 4) + 10 + i * 4, y * 2 + 4);
-			highlight(string(1, pieces[z][i]), 14);
 		}
 		move();
 	}
