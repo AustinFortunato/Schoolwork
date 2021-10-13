@@ -3,3 +3,18 @@
 ################################################################################
 
 /Debug
+/.vs
+/.vs/Schoolwork/v16
+/.vs/Schoolwork/v16/ipch/AutoPCH
+/x64/Debug
+/.vs
+/x64/Debug
+/.vs
+/SchoolWork.vcxproj.user
+/SchoolWork.vcxproj.filters
+/SchoolWork.vcxproj
+/SchoolWork.sln
+/SchoolWorkBuild.vcxproj.user
+/SchoolWorkBuild.vcxproj.filters
+/SchoolWorkBuild.vcxproj
+/SchoolWorkBuild.sln

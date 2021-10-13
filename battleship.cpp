@@ -192,6 +192,7 @@ void battleship::place_pieces() {
 
 		while (_getch() == 'r') {
 			r++;
+			cout << sizeof(pieces)/sizeof(pieces[z]);
 			switch (r % 4) {
 			case 0:
 				for (int i = 0; i < sizeof(pieces[z]); i++) {
@@ -217,7 +218,7 @@ void battleship::place_pieces() {
 			case 3:
 				for (int i = 0; i < sizeof(pieces[z]); i++) {
 					grid[player % 2 + 1][eks][why - i] = pieces[z][i];
-					setCursorPosition(eks * 4 + 10; why * 2 - i * 2);
+					setCursorPosition(eks * 4 + 10, why * 2 - i * 2);
 					highlight(string(1, pieces[z][i]), 14);
 				}
 				break;
