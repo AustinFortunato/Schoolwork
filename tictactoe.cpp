@@ -49,15 +49,17 @@ void tictactoe::print() {
 	cout << endl;
 }
 
+//make move char, tie condition
 int tictactoe::move(int player) {
-	int move;
+	char move;
 	int movez = 0;
 	int moves[9][2] = { {1,3},{2,3},{3,3},{1,2},{2,2},{3,2},{1,1},{2,1},{3,1} };
 	char pieces[2] = { 'X', 'O' };
 	cout << "Player " << (player % 2) + 1 << ">";
 	cin >> move;
-	if (grid[moves[move - 1][0] - 1][moves[move - 1][1] - 1] == ' ') {
-		grid[moves[move - 1][0] - 1][moves[move - 1][1] - 1] = pieces[player % 2];
+	int movea = move - '0';
+	if (grid[moves[movea - 1][0] - 1][moves[movea - 1][1] - 1] == ' ') {
+		grid[moves[movea - 1][0] - 1][moves[movea - 1][1] - 1] = pieces[player % 2];
 		movez++;
 	}
 	else {

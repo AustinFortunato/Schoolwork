@@ -185,7 +185,6 @@ void battleship::place_pieces() {
 		// Player presses number 1-5, boat spawns, r to rotate 90 degrees
 		setCursorPosition(0, 24);
 		int z;
-		int eks = x, why = y;
 
 		cin >> z;
 		z--;
@@ -195,30 +194,58 @@ void battleship::place_pieces() {
 			switch (r % 4) {
 			case 0:
 				for (int i = 0; i < sizeof(pieces[z]); i++) {
-					grid[player % 2 + 1][eks + i][why] = pieces[z][i];
-					setCursorPosition((eks * 4) + 10 + i * 4, why * 2 + 4);
-					highlight(string(1, pieces[z][i]), 14);
+					if (x + sizeof(pieces[z]) < 18) {
+						grid[player % 2 + 1][x + i][y] = pieces[z][i];
+						setCursorPosition((x * 4) + 10 + i * 4, y * 2 + 4);
+						highlight(string(1, pieces[z][i]), 14);
+						grid[player % 2 + 1][x][y - i] = '*';
+						if (y - i > -1) {
+							setCursorPosition(x * 4 + 10, y * 2 - i * 2 + 4);
+							highlight(string(1, '*'), 7);
+						}
+					}
 				}
 				break;
 			case 1:
 				for (int i = 0; i < sizeof(pieces[z]); i++) {
-					grid[player % 2 + 1][eks][why + i] = pieces[z][i];
-					setCursorPosition(eks * 4 + 10, why * 2 + 4 + i * 2);
-					highlight(string(1, pieces[z][i]), 14);
+					if (y + sizeof(pieces[z]) < 18) {
+						grid[player % 2 + 1][x][y + i] = pieces[z][i];
+						setCursorPosition(x * 4 + 10, y * 2 + 4 + i * 2);
+						highlight(string(1, pieces[z][i]), 14);
+						grid[player % 2 + 1][x + i][y] = '*';
+						if (x + i < 18) {
+							setCursorPosition((x * 4) + 10 + i * 4, y * 2 + 4);
+							highlight(string(1, '*'), 7);
+						}
+					}
 				}
 				break;
 			case 2:
 				for (int i = 0; i < sizeof(pieces[z]); i++) {
-					grid[player % 2 + 1][eks - i][why] = pieces[z][i];
-					setCursorPosition(eks * 4 + 10 - 4 * i, why * 2 + 4);
-					highlight(string(1, pieces[z][i]), 14);
+					if (x - sizeof(pieces[z]) > -1) {
+						grid[player % 2 + 1][x - i][y] = pieces[z][i];
+						setCursorPosition(x * 4 + 10 - 4 * i, y * 2 + 4);
+						highlight(string(1, pieces[z][i]), 14);
+						grid[player % 2 + 1][x][y + i] = '*';
+						if (y + i < 18) {
+							setCursorPosition(x * 4 + 10, y * 2 + 4 + i * 2);
+							highlight(string(1, '*'), 7);
+						}
+					}
 				}
 				break;
 			case 3:
 				for (int i = 0; i < sizeof(pieces[z]); i++) {
-					grid[player % 2 + 1][eks][why - i] = pieces[z][i];
-					setCursorPosition(eks * 4 + 10; why * 2 - i * 2);
-					highlight(string(1, pieces[z][i]), 14);
+					if (y - sizeof(pieces[z]) > -1) {
+						grid[player % 2 + 1][x][y - i] = pieces[z][i];
+						setCursorPosition(x * 4 + 10, y * 2 - i * 2 + 4);
+						highlight(string(1, pieces[z][i]), 14);
+						grid[player % 2 + 1][x - i][y] = '*';
+						if (x - i > -1) {
+							setCursorPosition(x * 4 + 10 - 4 * i, y * 2 + 4);
+							highlight(string(1, '*'), 7);
+						}
+					}
 				}
 				break;
 			}
