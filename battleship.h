@@ -13,6 +13,8 @@ public:
 	void setCursorPosition(int, int);
 	void initGrid();
 	void centerShips();
+	void rotate(int, int, char, int);
+	bool pathfinder(int, int);
 	~battleship();
 private:
 protected:

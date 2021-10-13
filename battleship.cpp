@@ -180,71 +180,70 @@ void battleship::centerShips() {
 
 }
 
+void battleship::rotate(int eks, int why, char piece, int color) {
+	if (eks > -1 && eks < 18 && why > -1 && why < 18) {
+		grid[player % 2 + 1][eks][why] = piece;
+		setCursorPosition(eks * 4 + 10, why * 2 + 4);
+		highlight(string(1, piece), color);
+		grid[player % 2 + 1][eks][why] = piece;
+	}
+}
+
+bool battleship::pathfinder(int eks, int why) {
+	int count = 0;
+	for (int i = 0; i < abs(eks + why); i++) {
+		if (grid[player%2+1][x + eks][y + why] == '*') {
+			count++;
+		}
+	}
+	if (count == abs(eks + why)) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 void battleship::place_pieces() {
 	while (1) {
 		// Player presses number 1-5, boat spawns, r to rotate 90 degrees
 		setCursorPosition(0, 24);
 		int z;
-
 		cin >> z;
 		z--;
+		bool ran = false;
 
 		while (_getch() == 'r') {
 			r++;
 			switch (r % 4) {
 			case 0:
-				for (int i = 0; i < sizeof(pieces[z]); i++) {
-					if (x + sizeof(pieces[z]) < 18) {
-						grid[player % 2 + 1][x + i][y] = pieces[z][i];
-						setCursorPosition((x * 4) + 10 + i * 4, y * 2 + 4);
-						highlight(string(1, pieces[z][i]), 14);
-						grid[player % 2 + 1][x][y - i] = '*';
-						if (y - i > -1) {
-							setCursorPosition(x * 4 + 10, y * 2 - i * 2 + 4);
-							highlight(string(1, '*'), 7);
-						}
+				if (pathfinder(strlen(pieces[z]), 0)) {
+					for (int i = 0; i < strlen(pieces[z]); i++) {
+						rotate(x, y - i, '*', 7);
+						rotate(x + i, y, pieces[z][i], 14);
 					}
 				}
 				break;
 			case 1:
-				for (int i = 0; i < sizeof(pieces[z]); i++) {
-					if (y + sizeof(pieces[z]) < 18) {
-						grid[player % 2 + 1][x][y + i] = pieces[z][i];
-						setCursorPosition(x * 4 + 10, y * 2 + 4 + i * 2);
-						highlight(string(1, pieces[z][i]), 14);
-						grid[player % 2 + 1][x + i][y] = '*';
-						if (x + i < 18) {
-							setCursorPosition((x * 4) + 10 + i * 4, y * 2 + 4);
-							highlight(string(1, '*'), 7);
-						}
+				if (pathfinder(0, strlen(pieces[z]))) {
+					for (int i = 0; i < strlen(pieces[z]); i++) {
+						rotate(x + i, y, '*', 7);
+						rotate(x, y + i, pieces[z][i], 14);
 					}
 				}
 				break;
 			case 2:
-				for (int i = 0; i < sizeof(pieces[z]); i++) {
-					if (x - sizeof(pieces[z]) > -1) {
-						grid[player % 2 + 1][x - i][y] = pieces[z][i];
-						setCursorPosition(x * 4 + 10 - 4 * i, y * 2 + 4);
-						highlight(string(1, pieces[z][i]), 14);
-						grid[player % 2 + 1][x][y + i] = '*';
-						if (y + i < 18) {
-							setCursorPosition(x * 4 + 10, y * 2 + 4 + i * 2);
-							highlight(string(1, '*'), 7);
-						}
-					}
+				if (pathfinder(0, strlen(pieces[z])))
+				for (int i = 0; i < strlen(pieces[z]); i++) {
+					rotate(x, y+i, '*', 7);
+					rotate(x - i, y, pieces[z][i], 14);
 				}
 				break;
 			case 3:
-				for (int i = 0; i < sizeof(pieces[z]); i++) {
-					if (y - sizeof(pieces[z]) > -1) {
-						grid[player % 2 + 1][x][y - i] = pieces[z][i];
-						setCursorPosition(x * 4 + 10, y * 2 - i * 2 + 4);
-						highlight(string(1, pieces[z][i]), 14);
-						grid[player % 2 + 1][x - i][y] = '*';
-						if (x - i > -1) {
-							setCursorPosition(x * 4 + 10 - 4 * i, y * 2 + 4);
-							highlight(string(1, '*'), 7);
-						}
+				if (pathfinder(x, y - strlen(pieces[z]))) {
+					for (int i = 0; i < strlen(pieces[z]); i++) {
+						rotate(x - i, y, '*', 7);
+						rotate(x, y - i, pieces[z][i], 14);
 					}
 				}
 				break;

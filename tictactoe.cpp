@@ -13,14 +13,14 @@ tictactoe::tictactoe()
 
 void tictactoe::tttmain() {
 	int x = 2;
-	int player = 2;
 	int movez = 0;
+	int player = 2;
 	char playagain = 'y';
 	cout << "\n\t=====================\n\tWelcome to tictactoe!\n\t=====================\n\n";
 	while (playagain != 'n') {
 		do {
 			print();
-			movez += move(player);
+			movez += move(player, movez);
 			x = check(movez, player);
 			player++;
 		} while (x == 2);
@@ -50,9 +50,8 @@ void tictactoe::print() {
 }
 
 //make move char, tie condition
-int tictactoe::move(int player) {
+int tictactoe::move(int player, int movesz) {
 	char move;
-	int movez = 0;
 	int moves[9][2] = { {1,3},{2,3},{3,3},{1,2},{2,2},{3,2},{1,1},{2,1},{3,1} };
 	char pieces[2] = { 'X', 'O' };
 	cout << "Player " << (player % 2) + 1 << ">";
@@ -60,13 +59,13 @@ int tictactoe::move(int player) {
 	int movea = move - '0';
 	if (grid[moves[movea - 1][0] - 1][moves[movea - 1][1] - 1] == ' ') {
 		grid[moves[movea - 1][0] - 1][moves[movea - 1][1] - 1] = pieces[player % 2];
-		movez++;
+		movesz++;
 	}
 	else {
 		cout << "You cannot move there!\n";
-		tictactoe::move(player);
+		tictactoe::move(player, movesz);
 	}
-	return movez;
+	return 1;
 }
 
 int tictactoe::check(int movez, int player) {
@@ -79,12 +78,13 @@ int tictactoe::check(int movez, int player) {
 			cout << "Player " << player % 2 + 1 << " Wins!\n\n";
 			return 0;
 		}
-		else if (movez == 9) {
+		else if (movez >= 9) {
 			cout << "Tie! Neither players win.\n"; // Tie
 			return 1;
 		}
 	}
 	cout << movez;
+	print();
 	return 2;
 }
 
