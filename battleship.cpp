@@ -181,7 +181,7 @@ void battleship::centerShips() {
 }
 
 void battleship::rotate(int eks, int why, char piece, int color) {
-	if (eks > -1 && eks < 18 && why > -1 && why < 18) {
+	if (eks > -1 && eks < 10 && why > -1 && why < 10) {
 		grid[player % 2 + 1][eks][why] = piece;
 		setCursorPosition(eks * 4 + 10, why * 2 + 4);
 		highlight(string(1, piece), color);
@@ -192,11 +192,12 @@ void battleship::rotate(int eks, int why, char piece, int color) {
 bool battleship::pathfinder(int eks, int why) {
 	int count = 0;
 	for (int i = 0; i < abs(eks + why); i++) {
-		if (grid[player%2+1][x + eks][y + why] == '*') {
+		if (grid[player % 2 + 1][x + eks][y + why] == '*' && x + eks > -1 && y + why > -1) {
 			count++;
 		}
 	}
 	if (count == abs(eks + why)) {
+		cout << count << " Abs " << abs(eks + why);
 		return true;
 	}
 	else {
@@ -211,41 +212,37 @@ void battleship::place_pieces() {
 		int z;
 		cin >> z;
 		z--;
-		bool ran = false;
 
 		while (_getch() == 'r') {
 			r++;
 			switch (r % 4) {
-			case 0:
-				if (pathfinder(strlen(pieces[z]), 0)) {
-					for (int i = 0; i < strlen(pieces[z]); i++) {
-						rotate(x, y - i, '*', 7);
-						rotate(x + i, y, pieces[z][i], 14);
-					}
-				}
-				break;
-			case 1:
-				if (pathfinder(0, strlen(pieces[z]))) {
-					for (int i = 0; i < strlen(pieces[z]); i++) {
-						rotate(x + i, y, '*', 7);
-						rotate(x, y + i, pieces[z][i], 14);
-					}
-				}
-				break;
-			case 2:
-				if (pathfinder(0, strlen(pieces[z])))
+			case 0: // x positive
 				for (int i = 0; i < strlen(pieces[z]); i++) {
-					rotate(x, y+i, '*', 7);
-					rotate(x - i, y, pieces[z][i], 14);
+					rotate(x, y - i, '*', 7);	
+					if (pathfinder(strlen(pieces[z]), 0)) 
+						rotate(x + i, y, pieces[z][i], 14);
 				}
 				break;
-			case 3:
-				if (pathfinder(x, y - strlen(pieces[z]))) {
-					for (int i = 0; i < strlen(pieces[z]); i++) {
-						rotate(x - i, y, '*', 7);
+			case 1: // y positive
+				for (int i = 0; i < strlen(pieces[z]); i++) {
+					rotate(x + i, y, '*', 7);
+					if (pathfinder(strlen(pieces[z]), 0)) 
+						rotate(x, y + i, pieces[z][i], 14);
+				}
+				break;
+			case 2: // x negative
+				for (int i = 0; i < strlen(pieces[z]); i++) {
+					rotate(x, y + i, '*', 7);
+					if (pathfinder(strlen(pieces[z]), 0))
+						rotate(x - i, y, pieces[z][i], 14);
+				}
+				break;
+			case 3: // y negative
+				for (int i = 0; i < strlen(pieces[z]); i++) {
+					rotate(x - i, y, '*', 7);
+					if (pathfinder(strlen(pieces[z]), 0))
 						rotate(x, y - i, pieces[z][i], 14);
 					}
-				}
 				break;
 			}
 		}
