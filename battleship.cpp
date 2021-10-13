@@ -12,9 +12,14 @@ using namespace std;
 #define KEY_RIGHT 77
 #define KEY_LEFT 75
 #define KEY_ENTER 13
+#define KEY_ONE 49
+#define KEY_TWO 50
+#define KEY_THREE 51
+#define KEY_FOUR 52
+#define KEY_FIVE 53
 
 int x = 0;
-int y = 0;	
+int y = 0;
 int player = 0;
 int r = 0;
 
@@ -42,11 +47,12 @@ battleship::battleship() {
 }
 
 void battleship::bsmain() {
-	initGrid();
-	print();
-	centerShips();
-	move();
-	place_pieces();
+	while (1) {
+		initGrid();
+		print();
+		centerShips();
+		functionController();
+	}
 }
 
 void battleship::highlight(string text, int color) {
@@ -92,79 +98,79 @@ void battleship::setCursorPosition(int x, int y) {
 	SetConsoleCursorPosition(hOut, coord);
 }
 
-void battleship::move() {
-	bool go = true;
-	while (go) {
-		int move = _getch();
-		if (move != 224) {
-			switch (move) {
-			case KEY_UP:
-				if (y > 0) {
-					setCursorPosition((x * 4) + 10, (y * 2) + 4);
-					if (grid[player % 2 + 1][x][y] == '*') {	
-						cout << grid[player % 2 + 1][x][y];
-					} else
-						highlight(string(1, grid[player % 2 + 1][x][y]), 14);
-					y--;
-					setCursorPosition((x * 4) + 10, (y * 2) + 4);
-					if (grid[player % 2 + 1][x][y] == '*') {	
-						highlight(string(1, grid[player % 2 + 1][x][y]), 240);
-					}
-					else
-						highlight(string(1, grid[player % 2 + 1][x][y]), 224);
-				}
-				break;
-			case KEY_DOWN:
-				if (y < 9) {
-					setCursorPosition((x * 4) + 10, (y * 2) + 4);
-					if (grid[player % 2 + 1][x][y] == '*') {
-						cout << grid[player % 2 + 1][x][y];
-					} else
-						highlight(string(1, grid[player % 2 + 1][x][y]), 14);
-					y++;
-					setCursorPosition((x * 4) + 10, (y * 2) + 4);
-					if (grid[player % 2 + 1][x][y] == '*') {	
-						highlight(string(1, grid[player % 2 + 1][x][y]), 240);
-					} else
-						highlight(string(1, grid[player % 2 + 1][x][y]), 224);
-				}
-				break;
-			case KEY_LEFT:
-				if (x > 0) {
-					setCursorPosition((x * 4) + 10, (y * 2) + 4);
-					if (grid[player % 2 + 1][x][y] == '*') {	
-						cout << grid[player % 2 + 1][x][y];
-					} else 
-						highlight(string(1, grid[player % 2 + 1][x][y]), 14);
-					x--;
-					setCursorPosition((x * 4) + 10, (y * 2) + 4);
-					if (grid[player % 2 + 1][x][y] == '*') {
-						highlight(string(1, grid[player % 2 + 1][x][y]), 240);
-					} else
-						highlight(string(1, grid[player % 2 + 1][x][y]), 224);
-				}
-				break;
-			case KEY_RIGHT:
-				if (x < 9) {
-					setCursorPosition((x * 4) + 10, (y * 2) + 4);
-					if (grid[player % 2 + 1][x][y] == '*') {	
-						cout << grid[player % 2 + 1][x][y];
-					} else
-						highlight(string(1, grid[player % 2 + 1][x][y]), 14);
-					x++;
-					setCursorPosition((x * 4) + 10, (y * 2) + 4);
-					if (grid[player % 2 + 1][x][y] == '*') {	
-						highlight(string(1, grid[player % 2 + 1][x][y]), 240);
-					} else
-						highlight(string(1, grid[player % 2 + 1][x][y]), 224);
-				}
-				break;
-			case KEY_ENTER:
-				setCursorPosition(0, 22);
-				go = false;
-				break;
+void battleship::move(char dir) {
+	switch (dir) {
+	case 'u':
+		if (y > 0) {
+			setCursorPosition((x * 4) + 10, (y * 2) + 4);
+			if (grid[player % 2 + 1][x][y] == '*') {
+				cout << grid[player % 2 + 1][x][y];
 			}
+			else
+				highlight(string(1, grid[player % 2 + 1][x][y]), 14);
+			y--;
+			setCursorPosition((x * 4) + 10, (y * 2) + 4);
+			if (grid[player % 2 + 1][x][y] == '*') {
+				highlight(string(1, grid[player % 2 + 1][x][y]), 240);
+			}
+			else
+				highlight(string(1, grid[player % 2 + 1][x][y]), 224);
 		}
+		break;
+	case 'd':
+		if (y < 9) {
+			setCursorPosition((x * 4) + 10, (y * 2) + 4);
+			if (grid[player % 2 + 1][x][y] == '*') {
+				cout << grid[player % 2 + 1][x][y];
+			}
+			else
+				highlight(string(1, grid[player % 2 + 1][x][y]), 14);
+			y++;
+			setCursorPosition((x * 4) + 10, (y * 2) + 4);
+			if (grid[player % 2 + 1][x][y] == '*') {
+				highlight(string(1, grid[player % 2 + 1][x][y]), 240);
+			}
+			else
+				highlight(string(1, grid[player % 2 + 1][x][y]), 224);
+		}
+		break;
+	case 'l':
+		if (x > 0) {
+			setCursorPosition((x * 4) + 10, (y * 2) + 4);
+			if (grid[player % 2 + 1][x][y] == '*') {
+				cout << grid[player % 2 + 1][x][y];
+			}
+			else
+				highlight(string(1, grid[player % 2 + 1][x][y]), 14);
+			x--;
+			setCursorPosition((x * 4) + 10, (y * 2) + 4);
+			if (grid[player % 2 + 1][x][y] == '*') {
+				highlight(string(1, grid[player % 2 + 1][x][y]), 240);
+			}
+			else
+				highlight(string(1, grid[player % 2 + 1][x][y]), 224);
+		}
+		break;
+	case 'r':
+		if (x < 9) {
+			setCursorPosition((x * 4) + 10, (y * 2) + 4);
+			if (grid[player % 2 + 1][x][y] == '*') {
+				cout << grid[player % 2 + 1][x][y];
+			}
+			else
+				highlight(string(1, grid[player % 2 + 1][x][y]), 14);
+			x++;
+			setCursorPosition((x * 4) + 10, (y * 2) + 4);
+			if (grid[player % 2 + 1][x][y] == '*') {
+				highlight(string(1, grid[player % 2 + 1][x][y]), 240);
+			}
+			else
+				highlight(string(1, grid[player % 2 + 1][x][y]), 224);
+		}
+		break;
+	case 'e':
+		setCursorPosition(0, 22);
+		break;
 	}
 }
 
@@ -173,7 +179,7 @@ void battleship::centerShips() {
 	highlight("Ships", 14);
 	for (int i = 0; i < 5; i++) {
 		setCursorPosition(53, 11 + i);
-		highlight(to_string(i+1), 14);
+		highlight(to_string(i + 1), 14);
 		cout << " ";
 		highlight(pieces[i], 14);
 	}
@@ -192,7 +198,7 @@ void battleship::rotate(int eks, int why, char piece, int color) {
 bool battleship::pathfinder(int eks, int why) {
 	int count = 0;
 	for (int i = 0; i < abs(eks + why); i++) {
-		if (grid[player%2+1][x + eks][y + why] == '*') {
+		if (grid[player % 2 + 1][x + eks][y + why] == '*') {
 			count++;
 		}
 	}
@@ -204,52 +210,88 @@ bool battleship::pathfinder(int eks, int why) {
 	}
 }
 
-void battleship::place_pieces() {
-	while (1) {
-		// Player presses number 1-5, boat spawns, r to rotate 90 degrees
-		setCursorPosition(0, 24);
-		int z;
-		cin >> z;
-		z--;
-		bool ran = false;
+void battleship::place_pieces(int z) {
+	// Player presses number 1-5, boat spawns, r to rotate 90 degrees
+	setCursorPosition(0, 24);
+	z--;
+	bool ran = false;
 
-		while (_getch() == 'r') {
-			r++;
-			switch (r % 4) {
-			case 0:
-				if (pathfinder(strlen(pieces[z]), 0)) {
-					for (int i = 0; i < strlen(pieces[z]); i++) {
-						rotate(x, y - i, '*', 7);
-						rotate(x + i, y, pieces[z][i], 14);
-					}
-				}
-				break;
-			case 1:
-				if (pathfinder(0, strlen(pieces[z]))) {
-					for (int i = 0; i < strlen(pieces[z]); i++) {
-						rotate(x + i, y, '*', 7);
-						rotate(x, y + i, pieces[z][i], 14);
-					}
-				}
-				break;
-			case 2:
-				if (pathfinder(0, strlen(pieces[z])))
+	while (_getch() == 'r') {
+		r++;
+		switch (r % 4) {
+		case 0:
+			if (pathfinder(strlen(pieces[z]), 0)) {
 				for (int i = 0; i < strlen(pieces[z]); i++) {
-					rotate(x, y+i, '*', 7);
+					rotate(x, y - i, '*', 7);
+					rotate(x + i, y, pieces[z][i], 14);
+				}
+			}
+			break;
+		case 1:
+			if (pathfinder(0, strlen(pieces[z]))) {
+				for (int i = 0; i < strlen(pieces[z]); i++) {
+					rotate(x + i, y, '*', 7);
+					rotate(x, y + i, pieces[z][i], 14);
+				}
+			}
+			break;
+		case 2:
+			if (pathfinder(0, strlen(pieces[z])))
+				for (int i = 0; i < strlen(pieces[z]); i++) {
+					rotate(x, y + i, '*', 7);
 					rotate(x - i, y, pieces[z][i], 14);
 				}
-				break;
-			case 3:
-				if (pathfinder(x, y - strlen(pieces[z]))) {
-					for (int i = 0; i < strlen(pieces[z]); i++) {
-						rotate(x - i, y, '*', 7);
-						rotate(x, y - i, pieces[z][i], 14);
-					}
+			break;
+		case 3:
+			if (pathfinder(x, y - strlen(pieces[z]))) {
+				for (int i = 0; i < strlen(pieces[z]); i++) {
+					rotate(x - i, y, '*', 7);
+					rotate(x, y - i, pieces[z][i], 14);
 				}
+			}
+			break;
+		}
+	}
+}
+
+void battleship::functionController() {
+	while (1) {
+		int input = _getch();
+		if (input != 224) {
+			switch (input) {
+			case KEY_UP:
+				move('u');
+				break;
+			case KEY_DOWN:
+				move('d');
+				break;
+			case KEY_LEFT:
+				move('l');
+				break;
+			case KEY_RIGHT:
+				move('r');
+				break;
+			//case KEY_ENTER:
+			//	// Where do we use enter as of now: 
+			//	// Want it to just place a ship 
+				break;
+			case KEY_ONE:
+				place_pieces(1);
+				break;
+			case KEY_TWO:
+				place_pieces(2);
+				break;
+			case KEY_THREE:
+				place_pieces(3);
+				break;
+			case KEY_FOUR:
+				place_pieces(4);
+				break;
+			case KEY_FIVE:
+				place_pieces(5);
 				break;
 			}
 		}
-		move();
 	}
 }
 
