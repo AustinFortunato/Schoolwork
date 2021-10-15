@@ -1,4 +1,5 @@
 #include "tictactoe.h"
+#include<conio.h>
 #include<iostream>
 using namespace std;
 
@@ -55,7 +56,7 @@ int tictactoe::move(int player, int movesz) {
 	int moves[9][2] = { {1,3},{2,3},{3,3},{1,2},{2,2},{3,2},{1,1},{2,1},{3,1} };
 	char pieces[2] = { 'X', 'O' };
 	cout << "Player " << (player % 2) + 1 << ">";
-	cin >> move;
+	move = _getch();
 	int movea = move - '0';
 	if (grid[moves[movea - 1][0] - 1][moves[movea - 1][1] - 1] == ' ') {
 		grid[moves[movea - 1][0] - 1][moves[movea - 1][1] - 1] = pieces[player % 2];

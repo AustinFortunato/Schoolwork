@@ -16,39 +16,6 @@ Schoolwork.vcxproj
 Schoolwork.vcxproj.filters
 
 Schoolwork.vcxproj.user
+/.vs
+/x64/Debug
 
-x64/Debug/battleship.obj
-
-x64/Debug/Main Menu.obj
-
-x64/Debug/Schoolwork.exe
-
-x64/Debug/Schoolwork.exe.recipe
-
-x64/Debug/Schoolwork.ilk
-
-x64/Debug/Schoolwork.log
-
-x64/Debug/Schoolwork.pdb
-
-x64/Debug/Schoolwork.tlog/CL.command.1.tlog
-
-x64/Debug/Schoolwork.tlog/CL.read.1.tlog
-
-x64/Debug/Schoolwork.tlog/CL.write.1.tlog
-
-x64/Debug/Schoolwork.tlog/link.command.1.tlog
-
-x64/Debug/Schoolwork.tlog/link.read.1.tlog
-
-x64/Debug/Schoolwork.tlog/link.write.1.tlog
-
-x64/Debug/Schoolwork.tlog/Schoolwork.lastbuildstate
-
-x64/Debug/Schoolwork.vcxproj.FileListAbsolute.txt
-
-x64/Debug/tictactoe.obj
-
-x64/Debug/vc142.idb
-
-x64/Debug/vc142.pdb

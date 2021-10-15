@@ -187,7 +187,7 @@ void battleship::centerShips() {
 }
 
 void battleship::rotate(int eks, int why, char piece, int color) {
-	if (eks > -1 && eks < 18 && why > -1 && why < 18) {
+	if (eks > -1 && eks < 10 && why > -1 && why < 10) {
 		grid[player % 2 + 1][eks][why] = piece;
 		setCursorPosition(eks * 4 + 10, why * 2 + 4);
 		highlight(string(1, piece), color);
@@ -198,11 +198,18 @@ void battleship::rotate(int eks, int why, char piece, int color) {
 bool battleship::pathfinder(int eks, int why) {
 	int count = 0;
 	for (int i = 0; i < abs(eks + why); i++) {
-		if (grid[player % 2 + 1][x + eks][y + why] == '*') {
-			count++;
+		if (eks == 0) {
+			if (grid[player % 2 + 1][x][y + (why/abs(why))*i] == '*' && x > -1 && y + why > -1 && why + y < 10) {
+				count++;
+			}
+		}
+		else {
+			if (grid[player % 2 + 1][x + (eks / abs(eks)) * i][y] == '*' && x + eks > -1 && eks + x < 10) {
+				count++;
+			}
 		}
 	}
-	if (count == abs(eks + why)) {
+	if (count >= abs(eks + why)-1) {
 		return true;
 	}
 	else {
@@ -211,42 +218,52 @@ bool battleship::pathfinder(int eks, int why) {
 }
 
 void battleship::place_pieces(int z) {
-	// Player presses number 1-5, boat spawns, r to rotate 90 degrees
-	setCursorPosition(0, 24);
-	z--;
-	bool ran = false;
+	while (1) {
+		// Player presses number 1-5, boat spawns, r to rotate 90 degrees
+		setCursorPosition(0, 24);
+		z--;
 
-	while (_getch() == 'r') {
-		r++;
-		switch (r % 4) {
-		case 0:
-			if (pathfinder(strlen(pieces[z]), 0)) {
+		while (_getch() == 'r') {
+			r++;
+			switch (r % 4) {
+			case 0: // x positive
 				for (int i = 0; i < strlen(pieces[z]); i++) {
 					rotate(x, y - i, '*', 7);
-					rotate(x + i, y, pieces[z][i], 14);
 				}
-			}
-			break;
-		case 1:
-			if (pathfinder(0, strlen(pieces[z]))) {
+				if (pathfinder(strlen(pieces[z]), 0)) {
+					for (int i = 0; i < strlen(pieces[z]); i++) {
+						rotate(x + i, y, pieces[z][i], 14);
+					}
+				}
+				break;
+			case 1: // y positive
 				for (int i = 0; i < strlen(pieces[z]); i++) {
 					rotate(x + i, y, '*', 7);
-					rotate(x, y + i, pieces[z][i], 14);
 				}
-			}
-			break;
-		case 2:
-			if (pathfinder(0, strlen(pieces[z])))
+				if (pathfinder(0, strlen(pieces[z]))) {
+					for (int i = 0; i < strlen(pieces[z]); i++) {
+						rotate(x, y + i, pieces[z][i], 14);
+					}
+				}
+				break;
+			case 2: // x negative
 				for (int i = 0; i < strlen(pieces[z]); i++) {
 					rotate(x, y + i, '*', 7);
-					rotate(x - i, y, pieces[z][i], 14);
 				}
-			break;
-		case 3:
-			if (pathfinder(x, y - strlen(pieces[z]))) {
-				for (int i = 0; i < strlen(pieces[z]); i++) {
-					rotate(x - i, y, '*', 7);
-					rotate(x, y - i, pieces[z][i], 14);
+				if (pathfinder(-strlen(pieces[z]), 0)) {
+					for (int i = 0; i < strlen(pieces[z]); i++) {
+						rotate(x - i, y, pieces[z][i], 14);
+					}
+				}
+				break;
+			case 3: // y negative
+				if (pathfinder(0, -strlen(pieces[z]))) {
+					for (int i = 0; i < strlen(pieces[z]); i++) {
+						rotate(x - i, y, '*', 7);
+					}
+					for (int i = 0; i < strlen(pieces[z]); i++) {
+						rotate(x, y - i, pieces[z][i], 14);
+					}
 				}
 			}
 			break;
