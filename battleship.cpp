@@ -225,6 +225,7 @@ void battleship::place_pieces(int z) {
 
 		while (_getch() == 'r') {
 			r++;
+			cout << sizeof(pieces)/sizeof(pieces[z]);
 			switch (r % 4) {
 			case 0: // x positive
 				for (int i = 0; i < strlen(pieces[z]); i++) {
