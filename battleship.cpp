@@ -4,6 +4,7 @@
 #include<string>
 #include<conio.h>
 #include<vector>
+#include<fstream>
 #include"battleship.h"
 using namespace std;
 
@@ -47,6 +48,7 @@ battleship::battleship() {
 }
 
 void battleship::bsmain() {
+	saveGame();
 	initGrid();
 	print();
 	centerShips();
@@ -325,6 +327,19 @@ void battleship::functionController() {
 			}
 		}
 	}
+}
+
+void battleship::saveGame() {
+	// What needs to be saved?
+	// The grid?
+	fstream saveFile;
+	saveFile.open("save.txt", ios::in | ios::out);
+	saveFile << "Test score";
+	saveFile.close();
+}
+
+void battleship::loadGame() {
+	
 }
 
 battleship::~battleship() {
