@@ -5,6 +5,7 @@ class battleship
 public:
 	battleship();
 	void bsmain();
+	void startMenu();
 	char grid[4][10][10];
 	void print();
 	void highlight(std::string, int);
