@@ -38,21 +38,29 @@ battleship::battleship() {
 	GetConsoleCursorInfo(out, &cursorInfo);
 	cursorInfo.bVisible = false;
 	SetConsoleCursorInfo(out, &cursorInfo);
-	for (int k = 0; k < 2; k++) {
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				grid[k][i][j] = '*';
-			}
-		}
-	}
 }
 
 void battleship::bsmain() {
-	saveGame();
-	initGrid();
-	print();
-	centerShips();
-	functionController();
+	startMenu();
+	while (1) {
+		print();
+		centerShips();
+		functionController();
+	}
+}
+
+void battleship::startMenu() {
+	char option;
+	cout << "Would you like to start a new game (n) or load an existing one (l)?\n> ";
+	cin >> option;
+	switch (option) {
+	case 'n':
+		initGrid();
+	case 'l':
+		loadGame();
+	default:
+		cout << "\nError enter a valid choice\n";
+	}
 }
 
 void battleship::highlight(string text, int color) {
@@ -311,16 +319,37 @@ void battleship::functionController() {
 }
 
 void battleship::saveGame() {
-	// What needs to be saved?
-	// The grid?
-	fstream saveFile;
-	saveFile.open("save.txt", ios::in | ios::out);
-	saveFile << "Test score";
-	saveFile.close();
+	string fName = "save.txt";
+	fstream save;
+	save.open(fName, ios::out);
+		
+	if (save.is_open()) {
+		for (int a = 0; a < 2; a++) {
+			for (int b = 0; b < 10; b++) {
+				for (int c = 0; c < 10; c++) {
+					save << grid[a][b][c] << ' ';
+				}
+			}
+		}
+	}
+	save.close();
 }
 
 void battleship::loadGame() {
-	
+	string fName = "save.txt";
+	fstream save;
+	save.open(fName, ios::out);
+	save.open(fName, ios::in);
+	if (save.is_open()) {
+		for (int a = 0; a < 2; a++) {
+			for (int b = 0; b < 10; b++) {
+				for (int c = 0; c < 10; c++) {
+					save >> grid[a][b][c];
+				}
+			}
+		}
+	}
+	save.close();
 }
 
 battleship::~battleship() {
