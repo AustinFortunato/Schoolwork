@@ -42,11 +42,10 @@ battleship::battleship() {
 
 void battleship::bsmain() {
 	startMenu();
-	while (1) {
-		print();
-		centerShips();
-		functionController();
-	}
+	print();
+	centerShips();
+	functionController();
+	saveGame();
 }
 
 void battleship::startMenu() {
@@ -301,7 +300,8 @@ void battleship::place_pieces(int z) {
 }
 
 void battleship::functionController() {
-	while (1) {
+	bool flag = true;
+	while (flag==true) {
 		int input = _getch();
 		if (input != 224) {
 			switch (input) {
@@ -331,6 +331,7 @@ void battleship::functionController() {
 				break;
 			case KEY_FIVE:
 				place_pieces(5);
+				flag = false;
 				break;
 			}
 		}
