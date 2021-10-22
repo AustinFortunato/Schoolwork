@@ -70,7 +70,7 @@ void battleship::highlight(string text, int color) {
 }
 
 void battleship::initGrid() {
-	for (int k = 0; k < 2; k++) {
+	for (int k = 0; k < 4; k++) {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				grid[k][i][j] = '*';
@@ -323,9 +323,8 @@ void battleship::saveGame() {
 	string fName = "save.txt";
 	fstream save;
 	save.open(fName, ios::out);
-		
 	if (save.is_open()) {
-		for (int a = 0; a < 2; a++) {
+		for (int a = 0; a < 4; a++) {
 			for (int b = 0; b < 10; b++) {
 				for (int c = 0; c < 10; c++) {
 					save << grid[a][b][c] << ' ';
@@ -334,15 +333,15 @@ void battleship::saveGame() {
 		}
 	}
 	save.close();
+	system("cls");
 }
 
 void battleship::loadGame() {
 	string fName = "save.txt";
 	fstream save;
-	save.open(fName, ios::out);
 	save.open(fName, ios::in);
 	if (save.is_open()) {
-		for (int a = 0; a < 2; a++) {
+		for (int a = 0; a < 4; a++) {
 			for (int b = 0; b < 10; b++) {
 				for (int c = 0; c < 10; c++) {
 					save >> grid[a][b][c];
