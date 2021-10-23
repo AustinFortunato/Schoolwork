@@ -21,7 +21,7 @@ using namespace std;
 int x = 0;
 int y = 0;
 int player = 0;
-int r = 0;
+int r = -1;
 
 char pieces[5][7] = {
 	{'<','-','-','0','-','>'},
@@ -101,69 +101,69 @@ void battleship::move(char m) {
 	case 'u':
 		if (y > 0) {
 			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2 + 1][x][y] == '*') {
-				cout << grid[player % 2 + 1][x][y];
+			if (grid[player % 2][x][y] == '*') {
+				cout << grid[player % 2][x][y];
 			}
 			else
-				highlight(string(1, grid[player % 2 + 1][x][y]), 14);
+				highlight(string(1, grid[player % 2][x][y]), 14);
 			y--;
 			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2 + 1][x][y] == '*') {
-				highlight(string(1, grid[player % 2 + 1][x][y]), 240);
+			if (grid[player % 2][x][y] == '*') {
+				highlight(string(1, grid[player % 2][x][y]), 240);
 			}
 			else
-				highlight(string(1, grid[player % 2 + 1][x][y]), 224);
+				highlight(string(1, grid[player % 2][x][y]), 224);
 		}
 		break;
 	case 'd':
 		if (y < 9) {
 			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2 + 1][x][y] == '*') {
-				cout << grid[player % 2 + 1][x][y];
+			if (grid[player % 2][x][y] == '*') {
+				cout << grid[player % 2][x][y];
 			}
 			else
-				highlight(string(1, grid[player % 2 + 1][x][y]), 14);
+				highlight(string(1, grid[player % 2][x][y]), 14);
 			y++;
 			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2 + 1][x][y] == '*') {
-				highlight(string(1, grid[player % 2 + 1][x][y]), 240);
+			if (grid[player % 2][x][y] == '*') {
+				highlight(string(1, grid[player % 2][x][y]), 240);
 			}
 			else
-				highlight(string(1, grid[player % 2 + 1][x][y]), 224);
+				highlight(string(1, grid[player % 2][x][y]), 224);
 		}
 		break;
 	case 'l':
 		if (x > 0) {
 			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2 + 1][x][y] == '*') {
-				cout << grid[player % 2 + 1][x][y];
+			if (grid[player % 2][x][y] == '*') {
+				cout << grid[player % 2][x][y];
 			}
 			else
-				highlight(string(1, grid[player % 2 + 1][x][y]), 14);
+				highlight(string(1, grid[player % 2][x][y]), 14);
 			x--;
 			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2 + 1][x][y] == '*') {
-				highlight(string(1, grid[player % 2 + 1][x][y]), 240);
+			if (grid[player % 2][x][y] == '*') {
+				highlight(string(1, grid[player % 2][x][y]), 240);
 			}
 			else
-				highlight(string(1, grid[player % 2 + 1][x][y]), 224);
+				highlight(string(1, grid[player % 2][x][y]), 224);
 		}
 		break;
 	case 'r':
 		if (x < 9) {
 			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2 + 1][x][y] == '*') {
-				cout << grid[player % 2 + 1][x][y];
+			if (grid[player % 2][x][y] == '*') {
+				cout << grid[player % 2][x][y];
 			}
 			else
-				highlight(string(1, grid[player % 2 + 1][x][y]), 14);
+				highlight(string(1, grid[player % 2][x][y]), 14);
 			x++;
 			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2 + 1][x][y] == '*') {
-				highlight(string(1, grid[player % 2 + 1][x][y]), 240);
+			if (grid[player % 2][x][y] == '*') {
+				highlight(string(1, grid[player % 2][x][y]), 240);
 			}
 			else
-				highlight(string(1, grid[player % 2 + 1][x][y]), 224);
+				highlight(string(1, grid[player % 2][x][y]), 224);
 		}
 		break;
 	case 'e':
@@ -186,28 +186,27 @@ void battleship::centerShips() {
 
 void battleship::rotate(int eks, int why, char piece, int color) {
 	if (eks > -1 && eks < 10 && why > -1 && why < 10) {
-		grid[player % 2 + 1][eks][why] = piece;
+		grid[player % 2][eks][why] = piece;
 		setCursorPosition(eks * 4 + 10, why * 2 + 4);
 		highlight(string(1, piece), color);
-		grid[player % 2 + 1][eks][why] = piece;
 	}
 }
 
 bool battleship::pathfinder(int eks, int why) {
-	int count = 0;
-	for (int i = 0; i < abs(eks + why); i++) {
+	int count = 1;
+	for (int i = 1; i < abs(eks + why); i++) {
 		if (eks == 0) {
-			if (grid[player % 2 + 1][x][y + (why / abs(why)) * i] == '*' && x > -1 && y + why > -1 && why + y < 10) {
+			if (grid[player % 2][x][y + (why / abs(why)) * i] == '*' && x > -2 && y + why > -2 && why + y <= 10) {
 				count++;
 			}
 		}
 		else {
-			if (grid[player % 2 + 1][x + (eks / abs(eks)) * i][y] == '*' && x + eks > -1 && eks + x < 10) {
+			if (grid[player % 2][x + (eks / abs(eks)) * i][y] == '*' && x + eks > -1 && eks + x <= 10) {
 				count++;
 			}
 		}
 	}
-	if (count >= abs(eks + why) - 1) {
+	if (count > abs(eks + why)-1) {
 		return true;
 	}
 	else {
@@ -219,50 +218,74 @@ void battleship::place_pieces(int z) {
 	// Player presses number 1-5, boat spawns, r to rotate 90 degrees
 	setCursorPosition(0, 24);
 	z--;
-
+	int size = strlen(pieces[z]);
+	bool tmp = false;
+	bool temp = false;
+	int lastLine[2] = { 0,0 };
 	while (_getch() == 'r') {
 		r++;
 		switch (r % 4) {
 		case 0: // x positive
-			for (int i = 0; i < strlen(pieces[z]); i++) {
-				rotate(x, y - i, '*', 7);
-			}
-			if (pathfinder(strlen(pieces[z]), 0)) {
-				for (int i = 0; i < strlen(pieces[z]); i++) {
+			if (pathfinder(size, 0)) {
+				for (int i = 0; i < size; i++) {
 					rotate(x + i, y, pieces[z][i], 14);
+					if (lastLine[1]) // if y
+						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i-1, '*', 7);
+					else if (lastLine[0]) // if x
+						rotate(x + lastLine[0] / abs(lastLine[0]) * i-1, y, '*', 7);
 				}
+				lastLine[0] = 1;
+				lastLine[1] = 0;
+				break;
 			}
-			break;
+			else {
+				r++;
+			}
 		case 1: // y positive
-			for (int i = 0; i < strlen(pieces[z]); i++) {
-				rotate(x + i, y, '*', 7);
-			}
-			if (pathfinder(0, strlen(pieces[z]))) {
-				for (int i = 0; i < strlen(pieces[z]); i++) {
-					rotate(x, y + i, pieces[z][i], 14);
+			if (pathfinder(0, size)) {
+				for (int i = 0; i < size; i++) {
+					rotate(x, y+i, pieces[z][i], 14);
+					if (lastLine[1]) // if y
+						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i-1, '*', 7);
+					else if (lastLine[0]) // if x
+						rotate(x + lastLine[0] / abs(lastLine[0]) * i, y-1, '*', 7);
 				}
+				lastLine[0] = 0;
+				lastLine[1] = 1;
+				break;
 			}
-			break;
+			else {-
+				r++;
+			}
 		case 2: // x negative
-			for (int i = 0; i < strlen(pieces[z]); i++) {
-				rotate(x, y + i, '*', 7);
-			}
-			if (pathfinder(-strlen(pieces[z]), 0)) {
-				for (int i = 0; i < strlen(pieces[z]); i++) {
+			if (pathfinder(-size, 0)) {
+				for (int i = 0; i < size; i++) {
 					rotate(x - i, y, pieces[z][i], 14);
+					if (lastLine[1]) // if y
+						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i-1, '*', 7);
+					else if (lastLine[0]) // if x
+						rotate(x + lastLine[0] / abs(lastLine[0]) * i, y-1, '*', 7);
 				}
+				lastLine[0] = -1;
+				lastLine[1] = 0;
+				break;
 			}
-			break;
+			else {
+				r++;
+			}
 		case 3: // y negative
-			if (pathfinder(0, -strlen(pieces[z]))) {
-				for (int i = 0; i < strlen(pieces[z]); i++) {
-					rotate(x - i, y, '*', 7);
-				}
-				for (int i = 0; i < strlen(pieces[z]); i++) {
+			if (pathfinder(0, -size)) {
+				for (int i = 0; i < size; i++) {
 					rotate(x, y - i, pieces[z][i], 14);
+					if (lastLine[1]) // if y
+						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i, '*', 7);
+					else if (lastLine[0]) // if x
+						rotate(x + lastLine[0] / abs(lastLine[0]) * i, y, '*', 7);
 				}
+				lastLine[0] = 0;
+				lastLine[1] = -1;
+				break;
 			}
-			break;
 		}
 	}
 }
@@ -283,10 +306,6 @@ void battleship::functionController() {
 				break;
 			case KEY_RIGHT:
 				move('r');
-				break;
-				//case KEY_ENTER:
-				//	// Where do we use enter as of now: 
-				//	// Want it to just place a ship 
 				break;
 			case KEY_ONE:
 				place_pieces(1);
