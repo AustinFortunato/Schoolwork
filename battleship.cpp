@@ -18,6 +18,7 @@ using namespace std;
 #define KEY_THREE 51
 #define KEY_FOUR 52
 #define KEY_FIVE 53
+#define KEY_H 104
 
 int x = 0;
 int y = 0;
@@ -176,80 +177,49 @@ void battleship::functionController() {
 }
 
 void battleship::move(char m) {
+	setCursorPosition((x * 4) + 10, (y * 2) + 4);
+	if (grid[player % 2][x][y] == '*') {
+		highlight(string(1, grid[player % 2][x][y]), 7);
+	}
+	else if (grid[player % 2][x][y] == 'X')
+		highlight(string(1, grid[player % 2][x][y]), 12);
+	else if (grid[player % 2][x][y] == 'O')
+		highlight(string(1, grid[player % 2][x][y]), 10);
+	else
+		highlight(string(1, grid[player % 2][x][y]), 14);
 	switch (m) {
 	case 'u':
 		if (y > 0) {
-			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2][x][y] == '*') {
-				cout << grid[player % 2][x][y];
-			}
-			else
-				highlight(string(1, grid[player % 2][x][y]), 14);
 			y--;
-			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2][x][y] == '*') {
-				highlight(string(1, grid[player % 2][x][y]), 240);
-			}
-			else
-				highlight(string(1, grid[player % 2][x][y]), 224);
 		}
-		break;
+			break;
 	case 'd':
 		if (y < 9) {
-			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2][x][y] == '*') {
-				cout << grid[player % 2][x][y];
-			}
-			else
-				highlight(string(1, grid[player % 2][x][y]), 14);
 			y++;
-			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2][x][y] == '*') {
-				highlight(string(1, grid[player % 2][x][y]), 240);
-			}
-			else
-				highlight(string(1, grid[player % 2][x][y]), 224);
 		}
 		break;
 	case 'l':
 		if (x > 0) {
-			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2][x][y] == '*') {
-				cout << grid[player % 2][x][y];
-			}
-			else
-				highlight(string(1, grid[player % 2][x][y]), 14);
 			x--;
-			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2][x][y] == '*') {
-				highlight(string(1, grid[player % 2][x][y]), 240);
-			}
-			else
-				highlight(string(1, grid[player % 2][x][y]), 224);
 		}
 		break;
 	case 'r':
 		if (x < 9) {
-			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2][x][y] == '*') {
-				cout << grid[player % 2][x][y];
-			}
-			else
-				highlight(string(1, grid[player % 2][x][y]), 14);
 			x++;
-			setCursorPosition((x * 4) + 10, (y * 2) + 4);
-			if (grid[player % 2][x][y] == '*') {
-				highlight(string(1, grid[player % 2][x][y]), 240);
-			}
-			else {
-				highlight(string(1, grid[player % 2][x][y]), 224);
-			}
 		}
 		break;
-	case 'e':
-		setCursorPosition(0, 22);
-		break;
+
 	}
+	setCursorPosition((x * 4) + 10, (y * 2) + 4);
+	if (grid[player % 2][x][y] == '*') {
+		highlight(string(1, grid[player % 2][x][y]), 240);
+	}
+	else if (grid[player % 2][x][y] == 'X')
+		highlight(string(1, grid[player % 2][x][y]), 192);
+	else if (grid[player % 2][x][y] == 'O')
+		highlight(string(1, grid[player % 2][x][y]), 160);
+	else
+		highlight(string(1, grid[player % 2][x][y]), 224);
 }
 
 void battleship::centerShips() {
@@ -422,6 +392,19 @@ void battleship::loadGame() {
 		}
 	}
 	save.close();
+}
+
+void battleship::hit() {
+	if (grid[player % 2][x][y] != '*' && grid[player % 2][x][y] != 'X' && grid[player % 2][x][y] != 'O') {
+		grid[player % 2][x][y] = 'X';
+		setCursorPosition(x * 4 + 10, y * 2 + 4);
+		highlight(string(1, 'X'), 12);
+	}
+	else if (grid[player % 2][x][y] == '*') {
+		grid[player % 2][x][y] = 'O';
+		setCursorPosition(x * 4 + 10, y * 2 + 4);
+		highlight(string(1, 'O'), 10);
+	}
 }
 
 battleship::~battleship() {

@@ -17,6 +17,7 @@ public:
 	void rotate(int, int, char, int);
 	void functionController();
 	bool pathfinder(int, int);
+	void hit();
 	void saveGame();
 	void loadGame();
 	~battleship();
