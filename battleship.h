@@ -18,6 +18,7 @@ public:
 	void functionController();
 	bool pathfinder(int, int);
 	void hit();
+	void win();
 	void saveGame();
 	void loadGame();
 	~battleship();
