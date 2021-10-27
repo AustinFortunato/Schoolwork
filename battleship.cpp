@@ -284,6 +284,7 @@ void battleship::place_pieces(int z) {
 	int size = strlen(pieces[z]);
 	bool tmp = false;
 	bool temp = false;
+	bool set = false;
 	int lastLine[2] = { 0,0 };
 	while (_getch() == 'r') {
 		r++;
@@ -291,11 +292,12 @@ void battleship::place_pieces(int z) {
 		case 0: // x positive
 			if (pathfinder(size, 0)) {
 				for (int i = 0; i < size; i++) {
-					rotate(x + i, y, pieces[z][i], 14);
-					if (lastLine[1]) // if y
-						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i - 1, '*', 7);
-					else if (lastLine[0]) // if x
-						rotate(x + lastLine[0] / abs(lastLine[0]) * i - 1, y, '*', 7);
+					if (lastLine[0] != 0 || lastLine[1] != 0)
+						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
+					if (grid[player % 2][x][y] == '*' || set) {
+						rotate(x + i, y, pieces[z][i], 14);
+						set = true;
+					}
 				}
 				lastLine[0] = 1;
 				lastLine[1] = 0;
@@ -307,31 +309,34 @@ void battleship::place_pieces(int z) {
 		case 1: // y positive
 			if (pathfinder(0, size)) {
 				for (int i = 0; i < size; i++) {
-					rotate(x, y + i, pieces[z][i], 14);
-					if (lastLine[1]) // if y
-						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i - 1, '*', 7);
-					else if (lastLine[0]) // if x
-						rotate(x + lastLine[0] / abs(lastLine[0]) * i, y - 1, '*', 7);
+					if (lastLine[0] != 0 || lastLine[1] != 0)
+						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
+					if (grid[player % 2][x][y] == '*' || set) {
+						rotate(x, y + i, pieces[z][i], 14);
+						set = true;
+					}
 				}
 				lastLine[0] = 0;
 				lastLine[1] = 1;
+				set = false;
 				break;
 			}
 			else {
-				-
 					r++;
 			}
 		case 2: // x negative
 			if (pathfinder(-size, 0)) {
 				for (int i = 0; i < size; i++) {
-					rotate(x - i, y, pieces[z][i], 14);
-					if (lastLine[1]) // if y
-						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i - 1, '*', 7);
-					else if (lastLine[0]) // if x
-						rotate(x + lastLine[0] / abs(lastLine[0]) * i, y - 1, '*', 7);
+					if (lastLine[0] != 0 || lastLine[1] != 0)
+						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
+					if (grid[player % 2][x][y] == '*' || set) {
+						rotate(x - i, y, pieces[z][i], 14);
+						set = true;
+					}
 				}
 				lastLine[0] = -1;
 				lastLine[1] = 0;
+				set = false;
 				break;
 			}
 			else {
@@ -340,14 +345,15 @@ void battleship::place_pieces(int z) {
 		case 3: // y negative
 			if (pathfinder(0, -size)) {
 				for (int i = 0; i < size; i++) {
-					rotate(x, y - i, pieces[z][i], 14);
-					if (lastLine[1]) // if y
-						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i, '*', 7);
-					else if (lastLine[0]) // if x
-						rotate(x + lastLine[0] / abs(lastLine[0]) * i, y, '*', 7);
+					if (lastLine[0] != 0 || lastLine[1] != 0)
+						rotate(x, y - i, pieces[z][i], 14);
+					if (grid[player % 2][x][y] == '*' || set) {
+						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
+					}
 				}
 				lastLine[0] = 0;
 				lastLine[1] = -1;
+				set = false;
 				break;
 			}
 		}
