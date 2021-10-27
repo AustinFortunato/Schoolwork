@@ -55,10 +55,13 @@ void battleship::startMenu() {
 	switch (option) {
 	case 'n':
 		initGrid();
+		break;
 	case 'l':
 		loadGame();
+		break;
 	default:
 		cout << "\nError enter a valid choice\n";
+		break;
 	}
 }
 
