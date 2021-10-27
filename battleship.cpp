@@ -57,8 +57,6 @@ void battleship::bsmain() {
 	startMenu();
 	print();
 	centerShips();
-	setCursorPosition(30, 30);
-	cout << grid[0][0][5];
 	functionController();
 	saveGame();
 }
@@ -99,11 +97,23 @@ void battleship::print() {
 	for (int i = 0; i < 10; i++) {
 		cout << "|   " << i + 1 << "\t| ";
 		for (int b1 = 0; b1 < 10; b1++) {
-			cout << grid[player][b1][i] << " | ";
+			if (grid[player % 2][b1][i] == '*') {
+				cout << grid[player % 2][b1][i];
+			}
+			else {
+				highlight(string(1, grid[player % 2][b1][i]), 14);
+			}
+			cout << " | ";
 		}
 		cout << "\t\t|   " << i + 1 << "\t| ";
 		for (int b2 = 0; b2 < 10; b2++) {
-			cout << grid[player][b2][i] << " | ";
+			if (grid[player % 2 + 2][b2][i] == '*') {
+				cout << grid[player % 2 + 2][b2][i];
+			}
+			else {
+				highlight(string(1, grid[player % 2 + 2][b2][i]), 14);
+			}
+			cout << " | ";
 		}
 		cout << "\n|-------|---|---|---|---|---|---|---|---|---|---|\t\t|-------|---|---|---|---|---|---|---|---|---|---|\n";
 	}
@@ -148,10 +158,6 @@ void battleship::functionController() {
 	}
 }
 
-/// <summary>
-/// Something about this is broken, I can't tell what but everytime I load game and use this, it overwrites the existing grid with **
-/// </summary>
-/// <param name="m"></param>
 void battleship::move(char m) {
 	switch (m) {
 	case 'u':
@@ -263,7 +269,7 @@ bool battleship::pathfinder(int eks, int why) {
 			}
 		}
 	}
-	if (count > abs(eks + why)-1) {
+	if (count > abs(eks + why) - 1) {
 		return true;
 	}
 	else {
@@ -287,9 +293,9 @@ void battleship::place_pieces(int z) {
 				for (int i = 0; i < size; i++) {
 					rotate(x + i, y, pieces[z][i], 14);
 					if (lastLine[1]) // if y
-						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i-1, '*', 7);
+						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i - 1, '*', 7);
 					else if (lastLine[0]) // if x
-						rotate(x + lastLine[0] / abs(lastLine[0]) * i-1, y, '*', 7);
+						rotate(x + lastLine[0] / abs(lastLine[0]) * i - 1, y, '*', 7);
 				}
 				lastLine[0] = 1;
 				lastLine[1] = 0;
@@ -301,27 +307,28 @@ void battleship::place_pieces(int z) {
 		case 1: // y positive
 			if (pathfinder(0, size)) {
 				for (int i = 0; i < size; i++) {
-					rotate(x, y+i, pieces[z][i], 14);
+					rotate(x, y + i, pieces[z][i], 14);
 					if (lastLine[1]) // if y
-						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i-1, '*', 7);
+						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i - 1, '*', 7);
 					else if (lastLine[0]) // if x
-						rotate(x + lastLine[0] / abs(lastLine[0]) * i, y-1, '*', 7);
+						rotate(x + lastLine[0] / abs(lastLine[0]) * i, y - 1, '*', 7);
 				}
 				lastLine[0] = 0;
 				lastLine[1] = 1;
 				break;
 			}
-			else {-
-				r++;
+			else {
+				-
+					r++;
 			}
 		case 2: // x negative
 			if (pathfinder(-size, 0)) {
 				for (int i = 0; i < size; i++) {
 					rotate(x - i, y, pieces[z][i], 14);
 					if (lastLine[1]) // if y
-						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i-1, '*', 7);
+						rotate(x, y + lastLine[1] / abs(lastLine[1]) * i - 1, '*', 7);
 					else if (lastLine[0]) // if x
-						rotate(x + lastLine[0] / abs(lastLine[0]) * i, y-1, '*', 7);
+						rotate(x + lastLine[0] / abs(lastLine[0]) * i, y - 1, '*', 7);
 				}
 				lastLine[0] = -1;
 				lastLine[1] = 0;
