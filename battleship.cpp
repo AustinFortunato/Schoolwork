@@ -23,6 +23,7 @@ int x = 0;
 int y = 0;
 int player = 0;
 int r = -1;
+HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 char pieces[5][7] = {
 	{'<','-','-','0','-','>'},
@@ -33,17 +34,31 @@ char pieces[5][7] = {
 };
 
 battleship::battleship() {
-	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO cursorInfo;
-	GetConsoleCursorInfo(out, &cursorInfo);
+	GetConsoleCursorInfo(hConsole, &cursorInfo);
 	cursorInfo.bVisible = false;
-	SetConsoleCursorInfo(out, &cursorInfo);
+	SetConsoleCursorInfo(hConsole, &cursorInfo);
+}
+
+void battleship::setCursorPosition(int xx, int yy) {
+	static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	std::cout.flush();
+	COORD coord = { (SHORT)xx, (SHORT)yy };
+	SetConsoleCursorPosition(hOut, coord);
+}
+
+void battleship::highlight(string text, int color) {
+	SetConsoleTextAttribute(hConsole, color);
+	cout << text;
+	SetConsoleTextAttribute(hConsole, 7);
 }
 
 void battleship::bsmain() {
 	startMenu();
 	print();
 	centerShips();
+	setCursorPosition(30, 30);
+	cout << grid[0][0][5];
 	functionController();
 	saveGame();
 }
@@ -65,13 +80,6 @@ void battleship::startMenu() {
 	}
 }
 
-void battleship::highlight(string text, int color) {
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, color);
-	cout << text;
-	SetConsoleTextAttribute(hConsole, 7);
-}
-
 void battleship::initGrid() {
 	for (int k = 0; k < 4; k++) {
 		for (int i = 0; i < 10; i++) {
@@ -91,23 +99,59 @@ void battleship::print() {
 	for (int i = 0; i < 10; i++) {
 		cout << "|   " << i + 1 << "\t| ";
 		for (int b1 = 0; b1 < 10; b1++) {
-			cout << grid[player][i][b1] << " | ";
+			cout << grid[player][b1][i] << " | ";
 		}
 		cout << "\t\t|   " << i + 1 << "\t| ";
 		for (int b2 = 0; b2 < 10; b2++) {
-			cout << grid[player][i][b2] << " | ";
+			cout << grid[player][b2][i] << " | ";
 		}
 		cout << "\n|-------|---|---|---|---|---|---|---|---|---|---|\t\t|-------|---|---|---|---|---|---|---|---|---|---|\n";
 	}
 }
 
-void battleship::setCursorPosition(int x, int y) {
-	static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	std::cout.flush();
-	COORD coord = { (SHORT)x, (SHORT)y };
-	SetConsoleCursorPosition(hOut, coord);
+void battleship::functionController() {
+	bool flag = true;
+	while (flag == true) {
+		int input = _getch();
+		if (input != 224) {
+			switch (input) {
+			case KEY_UP:
+				move('u');
+				break;
+			case KEY_DOWN:
+				move('d');
+				break;
+			case KEY_LEFT:
+				move('l');
+				break;
+			case KEY_RIGHT:
+				move('r');
+				break;
+			case KEY_ONE:
+				place_pieces(1);
+				break;
+			case KEY_TWO:
+				place_pieces(2);
+				break;
+			case KEY_THREE:
+				place_pieces(3);
+				break;
+			case KEY_FOUR:
+				place_pieces(4);
+				break;
+			case KEY_FIVE:
+				place_pieces(5);
+				flag = false;
+				break;
+			}
+		}
+	}
 }
 
+/// <summary>
+/// Something about this is broken, I can't tell what but everytime I load game and use this, it overwrites the existing grid with **
+/// </summary>
+/// <param name="m"></param>
 void battleship::move(char m) {
 	switch (m) {
 	case 'u':
@@ -174,8 +218,9 @@ void battleship::move(char m) {
 			if (grid[player % 2][x][y] == '*') {
 				highlight(string(1, grid[player % 2][x][y]), 240);
 			}
-			else
+			else {
 				highlight(string(1, grid[player % 2][x][y]), 224);
+			}
 		}
 		break;
 	case 'e':
@@ -302,45 +347,6 @@ void battleship::place_pieces(int z) {
 	}
 }
 
-void battleship::functionController() {
-	bool flag = true;
-	while (flag==true) {
-		int input = _getch();
-		if (input != 224) {
-			switch (input) {
-			case KEY_UP:
-				move('u');
-				break;
-			case KEY_DOWN:
-				move('d');
-				break;
-			case KEY_LEFT:
-				move('l');
-				break;
-			case KEY_RIGHT:
-				move('r');
-				break;
-			case KEY_ONE:
-				place_pieces(1);
-				break;
-			case KEY_TWO:
-				place_pieces(2);
-				break;
-			case KEY_THREE:
-				place_pieces(3);
-				break;
-			case KEY_FOUR:
-				place_pieces(4);
-				break;
-			case KEY_FIVE:
-				place_pieces(5);
-				flag = false;
-				break;
-			}
-		}
-	}
-}
-
 void battleship::saveGame() {
 	string fName = "save.txt";
 	fstream save;
@@ -349,7 +355,7 @@ void battleship::saveGame() {
 		for (int a = 0; a < 4; a++) {
 			for (int b = 0; b < 10; b++) {
 				for (int c = 0; c < 10; c++) {
-					save << grid[a][b][c] << ' ';
+					save << grid[a][c][b] << ' ';
 				}
 			}
 		}
@@ -366,7 +372,7 @@ void battleship::loadGame() {
 		for (int a = 0; a < 4; a++) {
 			for (int b = 0; b < 10; b++) {
 				for (int c = 0; c < 10; c++) {
-					save >> grid[a][b][c];
+					save >> grid[a][c][b];
 				}
 			}
 		}
