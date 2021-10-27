@@ -5,6 +5,7 @@ class battleship
 public:
 	battleship();
 	void bsmain();
+	void startMenu();
 	char grid[4][10][10];
 	void print();
 	void highlight(std::string, int);
@@ -16,6 +17,8 @@ public:
 	void rotate(int, int, char, int);
 	void functionController();
 	bool pathfinder(int, int);
+	void saveGame();
+	void loadGame();
 	~battleship();
 private:
 protected:

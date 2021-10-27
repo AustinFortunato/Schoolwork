@@ -4,6 +4,7 @@
 #include<string>
 #include<conio.h>
 #include<vector>
+#include<fstream>
 #include"battleship.h"
 using namespace std;
 
@@ -37,20 +38,28 @@ battleship::battleship() {
 	GetConsoleCursorInfo(out, &cursorInfo);
 	cursorInfo.bVisible = false;
 	SetConsoleCursorInfo(out, &cursorInfo);
-	for (int k = 0; k < 2; k++) {
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				grid[k][i][j] = '*';
-			}
-		}
-	}
 }
 
 void battleship::bsmain() {
-	initGrid();
+	startMenu();
 	print();
 	centerShips();
 	functionController();
+	saveGame();
+}
+
+void battleship::startMenu() {
+	char option;
+	cout << "Would you like to start a new game (n) or load an existing one (l)?\n> ";
+	cin >> option;
+	switch (option) {
+	case 'n':
+		initGrid();
+	case 'l':
+		loadGame();
+	default:
+		cout << "\nError enter a valid choice\n";
+	}
 }
 
 void battleship::highlight(string text, int color) {
@@ -61,7 +70,7 @@ void battleship::highlight(string text, int color) {
 }
 
 void battleship::initGrid() {
-	for (int k = 0; k < 2; k++) {
+	for (int k = 0; k < 4; k++) {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				grid[k][i][j] = '*';
@@ -291,7 +300,8 @@ void battleship::place_pieces(int z) {
 }
 
 void battleship::functionController() {
-	while (1) {
+	bool flag = true;
+	while (flag==true) {
 		int input = _getch();
 		if (input != 224) {
 			switch (input) {
@@ -321,10 +331,44 @@ void battleship::functionController() {
 				break;
 			case KEY_FIVE:
 				place_pieces(5);
+				flag = false;
 				break;
 			}
 		}
 	}
+}
+
+void battleship::saveGame() {
+	string fName = "save.txt";
+	fstream save;
+	save.open(fName, ios::out);
+	if (save.is_open()) {
+		for (int a = 0; a < 4; a++) {
+			for (int b = 0; b < 10; b++) {
+				for (int c = 0; c < 10; c++) {
+					save << grid[a][b][c] << ' ';
+				}
+			}
+		}
+	}
+	save.close();
+	system("cls");
+}
+
+void battleship::loadGame() {
+	string fName = "save.txt";
+	fstream save;
+	save.open(fName, ios::in);
+	if (save.is_open()) {
+		for (int a = 0; a < 4; a++) {
+			for (int b = 0; b < 10; b++) {
+				for (int c = 0; c < 10; c++) {
+					save >> grid[a][b][c];
+				}
+			}
+		}
+	}
+	save.close();
 }
 
 battleship::~battleship() {
