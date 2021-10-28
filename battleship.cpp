@@ -23,6 +23,7 @@ int x = 0;
 int y = 0;
 int player = 0;
 int r = -1;
+bool ships[5] = { true, true, true, true, true };
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 char pieces[5][7] = {
@@ -138,21 +139,41 @@ void battleship::functionController() {
 				move('r');
 				break;
 			case KEY_ONE:
-				place_pieces(1);
+				if (ships[0]) {
+					ships[0] = false;
+					centerShips();
+					place_pieces(1);
+				}
 				break;
 			case KEY_TWO:
-				place_pieces(2);
-				break;
+				if (ships[1]) {
+					ships[1] = false;
+					centerShips();
+					place_pieces(2);
+					break;
+				}
 			case KEY_THREE:
-				place_pieces(3);
-				break;
+				if (ships[2]) {
+					ships[2] = false;
+					centerShips();
+					place_pieces(3);
+					break;
+				}
 			case KEY_FOUR:
-				place_pieces(4);
-				break;
+				if (ships[3]) {
+					ships[3] = false;
+					centerShips();
+					place_pieces(4);
+					break;
+				}
 			case KEY_FIVE:
-				place_pieces(5);
-				flag = false;
-				break;
+				if (ships[4]) {
+					ships[4] = false;
+					centerShips();
+					place_pieces(5);
+					flag = false;
+					break;
+				}
 			}
 		}
 	}
@@ -242,7 +263,10 @@ void battleship::centerShips() {
 		setCursorPosition(53, 11 + i);
 		highlight(to_string(i + 1), 14);
 		cout << " ";
-		highlight(pieces[i], 14);
+		if (ships[i])
+			highlight(pieces[i], 2);
+		else
+			highlight(pieces[i], 12);
 	}
 
 }
