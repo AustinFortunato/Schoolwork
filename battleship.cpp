@@ -56,7 +56,7 @@ battleship::battleship() {
 /// <param name="yy">Sets the y of cursor pos</param>
 void battleship::setCursorPosition(int xx, int yy) {
 	static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	std::cout.flush();
+	cout.flush();
 	COORD coord = { (SHORT)xx, (SHORT)yy };
 	SetConsoleCursorPosition(hOut, coord);
 }
@@ -209,6 +209,12 @@ void battleship::functionController() {
 						place_pieces(5);
 						flag = false;
 						break;
+					}
+				}
+			case KEY_H:
+				for (int i = 0; i < 5; i++) {
+					if (ships[i] == false) {
+						hit();
 					}
 				}
 			}
@@ -474,10 +480,14 @@ void battleship::hit() {
 
 // Add a hits1 and hits 2 functionality to this
 void battleship::win() {
-	if (hits > 23) {
+	if (hits == 23) {
 		char loop;
+		hits = 0;
 		system("cls");
 		setCursorPosition(0, 0);
+		for (int i = 0; i < 5; i++) {
+			ships[i] = true;
+		}
 		do {
 			cout << "Player X won the game, successfully hitting all the opponenets ships!\nWould you like to play again?\ny : yes\nn : no\n> "; // Add player 1 and two
 			cin >> loop;
