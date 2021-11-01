@@ -23,7 +23,7 @@ int x = 0;
 int y = 0;
 int player = 0;
 int r = -1;
-bool ships[5] = { true, true, true, true, true };
+bool ships[6] = { true, true, true, true, true, false };
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 char pieces[5][7] = {
@@ -125,46 +125,52 @@ void battleship::functionController() {
 	while (flag) {
 		int input = _getch();
 		if (input != 224) {
-			switch (input) {
-			case KEY_UP:
-				move('u');
-				break;
-			case KEY_DOWN:
-				move('d');
-				break;
-			case KEY_LEFT:
-				move('l');
-				break;
-			case KEY_RIGHT:
-				move('r');
-				break;
-			case KEY_ONE:
-				if (ships[0]) {
-					place_pieces(1);
-				}
-				break;
-			case KEY_TWO:
-				if (ships[1]) {
-					place_pieces(2);
+			if (!(ships[0] && ships[1] && ships[2] && ships[3] && ships[4] && ships[5])) {
+				switch (input) {
+				case KEY_UP:
+					move('u');
 					break;
-				}
-			case KEY_THREE:
-				if (ships[2]) {
-					place_pieces(3);
+				case KEY_DOWN:
+					move('d');
 					break;
-				}
-			case KEY_FOUR:
-				if (ships[3]) {
-					place_pieces(4);
+				case KEY_LEFT:
+					move('l');
 					break;
-				}
-			case KEY_FIVE:
-				if (ships[4]) {
-					place_pieces(5);
-					flag = false;
+				case KEY_RIGHT:
+					move('r');
 					break;
+				case KEY_ONE:
+					if (ships[0]) {
+						place_pieces(1);
+						ships[5] = false;
+					}
+					break;
+				case KEY_TWO:
+					if (ships[1]) {
+						place_pieces(2);
+						break;
+					}
+				case KEY_THREE:
+					if (ships[2]) {
+						place_pieces(3);
+						break;
+					}
+				case KEY_FOUR:
+					if (ships[3]) {
+						place_pieces(4);
+						break;
+					}
+				case KEY_FIVE:
+					if (ships[4]) {
+						place_pieces(5);
+						flag = false;
+						break;
+					}
 				}
 			}
+		}
+		else {
+			break;
 		}
 	}
 }
