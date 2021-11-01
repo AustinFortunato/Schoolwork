@@ -23,7 +23,7 @@ int x = 0;
 int y = 0;
 int player = 0;
 int r = -1;
-bool ships[6] = { true, true, true, true, true, false };
+bool ships[2][6] = { {true, true, true, true, true, false}, {true,true,true,true,true,true} };
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 char pieces[5][7] = {
@@ -56,10 +56,13 @@ void battleship::highlight(string text, int color) {
 
 void battleship::bsmain() {
 	startMenu();
-	print();
-	centerShips();
-	functionController();
-	saveGame();
+	while (1) {
+		print();
+		centerShips();
+		functionController();
+		player++;
+		saveGame();
+	}
 }
 
 void battleship::startMenu() {
@@ -125,7 +128,7 @@ void battleship::functionController() {
 	while (flag) {
 		int input = _getch();
 		if (input != 224) {
-			if (!(ships[0] && ships[1] && ships[2] && ships[3] && ships[4] && ships[5])) {
+			if (!(ships[player%2][0] && ships[player%2][1] && ships[player%2][2] && ships[player%2][3] && ships[player%2][4] && ships[player%2][5])) {
 				switch (input) {
 				case KEY_UP:
 					move('u');
@@ -140,37 +143,34 @@ void battleship::functionController() {
 					move('r');
 					break;
 				case KEY_ONE:
-					if (ships[0]) {
+					if (ships[player%2][0]) {
 						place_pieces(1);
-						ships[5] = false;
+						ships[player%2][5] = false;
 					}
 					break;
 				case KEY_TWO:
-					if (ships[1]) {
+					if (ships[player%2][1]) {
 						place_pieces(2);
 						break;
 					}
 				case KEY_THREE:
-					if (ships[2]) {
+					if (ships[player%2][2]) {
 						place_pieces(3);
 						break;
 					}
 				case KEY_FOUR:
-					if (ships[3]) {
+					if (ships[player%2][3]) {
 						place_pieces(4);
 						break;
 					}
 				case KEY_FIVE:
-					if (ships[4]) {
+					if (ships[player%2][4]) {
 						place_pieces(5);
 						flag = false;
 						break;
 					}
 				}
 			}
-		}
-		else {
-			break;
 		}
 	}
 }
@@ -259,7 +259,7 @@ void battleship::centerShips() {
 		setCursorPosition(53, 11 + i);
 		highlight(to_string(i + 1), 14);
 		cout << " ";
-		if (ships[i])
+		if (ships[player%2][i])
 			highlight(pieces[i], 2);
 		else
 			highlight(pieces[i], 12);
@@ -316,7 +316,7 @@ void battleship::place_pieces(int z) {
 						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
 					if (grid[player % 2][x][y] == '*' || set) {
 						rotate(x + i, y, pieces[z][i], 14);
-						ships[z] = false;
+						ships[player%2][z] = false;
 						centerShips();
 						set = true;
 					}
@@ -337,7 +337,7 @@ void battleship::place_pieces(int z) {
 					if (grid[player % 2][x][y] == '*' || set) {
 						rotate(x, y + i, pieces[z][i], 14);
 						set = true;
-						ships[z] = false;
+						ships[player%2][z] = false;
 						centerShips();
 					}
 				}
@@ -357,7 +357,7 @@ void battleship::place_pieces(int z) {
 					if (grid[player % 2][x][y] == '*' || set) {
 						rotate(x - i, y, pieces[z][i], 14);
 						set = true;
-						ships[z] = false;
+						ships[player%2][z] = false;
 						centerShips();
 					}
 				}
@@ -377,7 +377,7 @@ void battleship::place_pieces(int z) {
 					}
 					if (grid[player % 2][x][y] == '*' || set) {
 						rotate(x, y - i, pieces[z][i], 14);
-						ships[z] = false;
+						ships[player%2][z] = false;
 						set = true;
 						centerShips();
 					}
