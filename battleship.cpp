@@ -140,36 +140,26 @@ void battleship::functionController() {
 				break;
 			case KEY_ONE:
 				if (ships[0]) {
-					ships[0] = false;
-					centerShips();
 					place_pieces(1);
 				}
 				break;
 			case KEY_TWO:
 				if (ships[1]) {
-					ships[1] = false;
-					centerShips();
 					place_pieces(2);
 					break;
 				}
 			case KEY_THREE:
 				if (ships[2]) {
-					ships[2] = false;
-					centerShips();
 					place_pieces(3);
 					break;
 				}
 			case KEY_FOUR:
 				if (ships[3]) {
-					ships[3] = false;
-					centerShips();
 					place_pieces(4);
 					break;
 				}
 			case KEY_FIVE:
 				if (ships[4]) {
-					ships[4] = false;
-					centerShips();
 					place_pieces(5);
 					flag = false;
 					break;
@@ -320,11 +310,14 @@ void battleship::place_pieces(int z) {
 						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
 					if (grid[player % 2][x][y] == '*' || set) {
 						rotate(x + i, y, pieces[z][i], 14);
+						ships[z] = false;
+						centerShips();
 						set = true;
 					}
 				}
 				lastLine[0] = 1;
 				lastLine[1] = 0;
+				set = false;
 				break;
 			}
 			else {
@@ -338,6 +331,8 @@ void battleship::place_pieces(int z) {
 					if (grid[player % 2][x][y] == '*' || set) {
 						rotate(x, y + i, pieces[z][i], 14);
 						set = true;
+						ships[z] = false;
+						centerShips();
 					}
 				}
 				lastLine[0] = 0;
@@ -356,6 +351,8 @@ void battleship::place_pieces(int z) {
 					if (grid[player % 2][x][y] == '*' || set) {
 						rotate(x - i, y, pieces[z][i], 14);
 						set = true;
+						ships[z] = false;
+						centerShips();
 					}
 				}
 				lastLine[0] = -1;
@@ -369,10 +366,14 @@ void battleship::place_pieces(int z) {
 		case 3: // y negative
 			if (pathfinder(0, -size)) {
 				for (int i = 0; i < size; i++) {
-					if (lastLine[0] != 0 || lastLine[1] != 0)
-						rotate(x, y - i, pieces[z][i], 14);
-					if (grid[player % 2][x][y] == '*' || set) {
+					if (lastLine[0] != 0 || lastLine[1] != 0){
 						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
+					}
+					if (grid[player % 2][x][y] == '*' || set) {
+						rotate(x, y - i, pieces[z][i], 14);
+						ships[z] = false;
+						set = true;
+						centerShips();
 					}
 				}
 				lastLine[0] = 0;
