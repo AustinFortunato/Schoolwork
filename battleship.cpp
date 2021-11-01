@@ -122,7 +122,7 @@ void battleship::print() {
 
 void battleship::functionController() {
 	bool flag = true;
-	while (flag == true) {
+	while (flag) {
 		int input = _getch();
 		if (input != 224) {
 			switch (input) {
