@@ -24,7 +24,7 @@ int x = 0;
 int y = 0;
 int player = 0;
 int r = -1;
-bool ships[2][6] = { {true, true, true, true, true, false}, {true,true,true,true,true,true} };
+bool ships[2][6] = { {true, true, true, true, true, false}, {true,true,true,true,true,false} };
 int hits = 0;
 bool flag = true;
 //hits1 = 0;
@@ -76,19 +76,12 @@ void battleship::highlight(string text, int color) {
 /// Original Series of functions
 /// </summary>
 void battleship::bsmain() {
-	startMenu();
-	while (1) {
-		print();
-		centerShips();
-		functionController();
-		player++;
-		saveGame();
-	}
 	while (flag) {
 		startMenu();
 		print();
 		centerShips();
 		functionController();
+		player++;
 		saveGame();
 	}
 }
@@ -164,8 +157,6 @@ void battleship::print() {
 /// This directs the users controls to the right function
 /// </summary>
 void battleship::functionController() {
-	bool flag = true;
-	while (flag) {
 	while (hits < 23) { //hits1 < 23 && hits2 < 23
 		int input = _getch();
 		if (input != 224) {
@@ -207,14 +198,15 @@ void battleship::functionController() {
 				case KEY_FIVE:
 					if (ships[player%2][4]) {
 						place_pieces(5);
-						flag = false;
 						break;
 					}
-				}
-			case KEY_H:
-				for (int i = 0; i < 5; i++) {
-					if (ships[i] == false) {
-						hit();
+				case KEY_H:
+					for (int h = 0; h < 2; h++) {
+						for (int i = 0; i < 5; i++) {
+							if (ships[h][i] == false) {
+								hit();
+							}
+						}
 					}
 				}
 			}
@@ -485,8 +477,11 @@ void battleship::win() {
 		hits = 0;
 		system("cls");
 		setCursorPosition(0, 0);
-		for (int i = 0; i < 5; i++) {
-			ships[i] = true;
+		for (int h = 0; h < 2; h++) {
+			for (int i = 0; i < 5; i++) {
+				ships[h][i] = true;
+			}
+			ships[h][6]=true;
 		}
 		do {
 			cout << "Player X won the game, successfully hitting all the opponenets ships!\nWould you like to play again?\ny : yes\nn : no\n> "; // Add player 1 and two
