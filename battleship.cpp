@@ -1,11 +1,10 @@
 //Own a musket for home defense, since that's what the founding fathers intended. Four ruffians break into my house. "What the devil?" As I grab my powdered wig and Kentucky rifle. Blow a golf ball sized hole through the first man, he's dead on the spot. Draw my pistol on the second man, miss him entirely because it's smoothbore and nails the neighbors dog. I have to resort to the cannon mounted at the top of the stairs loaded with grape shot, "Tally ho lads" the grape shot shreds two men in the blast, the sound and extra shrapnel set off car alarms. Fix bayonet and charge the last terrified rapscallion. He Bleeds out waiting on the police to arrive since triangular bayonet wounds are impossible to stitch up. Just as the founding fathers intended.
-#include<iostream>
-#include<windows.h>
-#include<string>
-#include<conio.h>
-#include<vector>
-#include<fstream>
 #include"battleship.h"
+#include<windows.h>
+#include<iostream>
+#include<fstream>
+#include<conio.h>
+#include<string>
 using namespace std;
 
 #define KEY_UP 72
@@ -27,6 +26,8 @@ int r = -1;
 bool ships[2][6] = { {true, true, true, true, true, false}, {true,true,true,true,true,false} };
 int hits = 0;
 bool flag = true;
+int playerOffset = 0;
+int hitInt = 0;
 //hits1 = 0;
 //hits2 = 0;
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -46,7 +47,20 @@ battleship::battleship() {
 	CONSOLE_CURSOR_INFO cursorInfo;
 	GetConsoleCursorInfo(hConsole, &cursorInfo);
 	cursorInfo.bVisible = false;
-	SetConsoleCursorInfo(hConsole, &cursorInfo);
+	x = 0;
+	y = 0;
+	player = 0;
+	r = -1;
+	hits = 0;
+	flag = true;
+	playerOffset = 0;
+	hitInt = 0;
+	for (int h = 0; h < 2; h++) {
+		for (int i = 0; i < 5; i++) {
+			ships[h][i] = true;
+		}
+		ships[h][5] = false;
+	}
 }
 
 /// <summary>
@@ -76,14 +90,14 @@ void battleship::highlight(string text, int color) {
 /// Original Series of functions
 /// </summary>
 void battleship::bsmain() {
+	startMenu();
 	while (flag) {
-		startMenu();
 		print();
 		centerShips();
 		functionController();
 		player++;
-		saveGame();
 	}
+	saveGame();
 }
 
 /// <summary>
@@ -99,6 +113,11 @@ void battleship::startMenu() {
 		break;
 	case 'l':
 		loadGame();
+		for (int h = 0; h < 2; h++) {
+			for (int i = 0; i < 5; i++) {
+				ships[h][i] = false;
+			}
+		}
 		break;
 	default:
 		cout << "\nError enter a valid choice\n";
@@ -134,6 +153,12 @@ void battleship::print() {
 			if (grid[player % 2][b1][i] == '*') {
 				cout << grid[player % 2][b1][i];
 			}
+			else if (grid[player % 2][b1][i] == 'X') {
+				highlight("X", 12);
+			}
+			else if (grid[player % 2][b1][i] == 'O') {
+				highlight("O", 10);
+			}
 			else {
 				highlight(string(1, grid[player % 2][b1][i]), 14);
 			}
@@ -143,6 +168,12 @@ void battleship::print() {
 		for (int b2 = 0; b2 < 10; b2++) {
 			if (grid[player % 2 + 2][b2][i] == '*') {
 				cout << grid[player % 2 + 2][b2][i];
+			}
+			else if (grid[player % 2 + 2][b2][i] == 'X') {
+				highlight("X", 12);
+			}
+			else if (grid[player % 2 + 2][b2][i] == 'O') {
+				highlight("O", 10);
 			}
 			else {
 				highlight(string(1, grid[player % 2 + 2][b2][i]), 14);
@@ -157,47 +188,49 @@ void battleship::print() {
 /// This directs the users controls to the right function
 /// </summary>
 void battleship::functionController() {
-	while (hits < 23) { //hits1 < 23 && hits2 < 23
+	bool flag = true;
+	while (flag) { //hits1 < 23 && hits2 < 23
 		int input = _getch();
 		if (input != 224) {
-			if (!(ships[player%2][0] && ships[player%2][1] && ships[player%2][2] && ships[player%2][3] && ships[player%2][4] && ships[player%2][5])) {
+			if (!(ships[player % 2][0] && ships[player % 2][1] && ships[player % 2][2] && ships[player % 2][3] && ships[player % 2][4] && ships[player % 2][5])) {
 				switch (input) {
 				case KEY_UP:
-					move('u');
+					move('u', hitInt);
 					break;
 				case KEY_DOWN:
-					move('d');
+					move('d', hitInt);
 					break;
 				case KEY_LEFT:
-					move('l');
+					move('l', hitInt);
 					break;
 				case KEY_RIGHT:
-					move('r');
+					move('r', hitInt);
 					break;
 				case KEY_ONE:
-					if (ships[player%2][0]) {
+					if (ships[player % 2][0]) {
 						place_pieces(1);
-						ships[player%2][5] = false;
+						ships[player % 2][5] = false;
 					}
 					break;
 				case KEY_TWO:
-					if (ships[player%2][1]) {
+					if (ships[player % 2][1]) {
 						place_pieces(2);
 						break;
 					}
 				case KEY_THREE:
-					if (ships[player%2][2]) {
+					if (ships[player % 2][2]) {
 						place_pieces(3);
 						break;
 					}
 				case KEY_FOUR:
-					if (ships[player%2][3]) {
+					if (ships[player % 2][3]) {
 						place_pieces(4);
 						break;
 					}
 				case KEY_FIVE:
-					if (ships[player%2][4]) {
+					if (ships[player % 2][4]) {
 						place_pieces(5);
+						flag = false;
 						break;
 					}
 				case KEY_H:
@@ -205,6 +238,8 @@ void battleship::functionController() {
 						for (int i = 0; i < 5; i++) {
 							if (ships[h][i] == false) {
 								hit();
+								//Sleep(120);
+								flag = false;
 							}
 						}
 					}
@@ -219,23 +254,23 @@ void battleship::functionController() {
 /// Moves the cursor around the grid
 /// </summary>
 /// <param name="m">Takes a character for what dirction you want the cursor to move</param>
-void battleship::move(char m) {
-	setCursorPosition((x * 4) + 10, (y * 2) + 4);
-	if (grid[player % 2][x][y] == '*') {
-		highlight(string(1, grid[player % 2][x][y]), 7);
+void battleship::move(char m, int xOffSet) {
+	setCursorPosition((x * 4) + xOffSet + 10, (y * 2) + 4);
+	if (grid[player % 2 + playerOffset][x][y] == '*') {
+		highlight(string(1, grid[player % 2 + playerOffset][x][y]), 7);
 	}
-	else if (grid[player % 2][x][y] == 'X')
-		highlight(string(1, grid[player % 2][x][y]), 12);
-	else if (grid[player % 2][x][y] == 'O')
-		highlight(string(1, grid[player % 2][x][y]), 10);
+	else if (grid[player % 2 + playerOffset][x][y] == 'X')
+		highlight(string(1, grid[player % 2 + playerOffset][x][y]), 12);
+	else if (grid[(player + 1) % 2][x][y] == 'O')
+		highlight(string(1, grid[player % 2 + playerOffset][x][y]), 10);
 	else
-		highlight(string(1, grid[player % 2][x][y]), 14);
+		highlight(string(1, grid[player % 2 + playerOffset][x][y]), 14);
 	switch (m) {
 	case 'u':
 		if (y > 0) {
 			y--;
 		}
-			break;
+		break;
 	case 'd':
 		if (y < 9) {
 			y++;
@@ -252,16 +287,16 @@ void battleship::move(char m) {
 		}
 		break;
 	}
-	setCursorPosition((x * 4) + 10, (y * 2) + 4);
-	if (grid[player % 2][x][y] == '*') {
-		highlight(string(1, grid[player % 2][x][y]), 240);
+	setCursorPosition((x * 4) + xOffSet + 10, (y * 2) + 4);
+	if (grid[player % 2 + playerOffset][x][y] == '*') {
+		highlight(string(1, grid[player % 2 + playerOffset][x][y]), 240);
 	}
-	else if (grid[player % 2][x][y] == 'X')
-		highlight(string(1, grid[player % 2][x][y]), 192);
-	else if (grid[player % 2][x][y] == 'O')
-		highlight(string(1, grid[player % 2][x][y]), 160);
+	else if (grid[player % 2 + playerOffset][x][y] == 'X')
+		highlight(string(1, grid[player % 2 + playerOffset][x][y]), 192);
+	else if (grid[(player + 1) % 2][x][y] == 'O')
+		highlight(string(1, grid[player % 2 + playerOffset][x][y]), 160);
 	else
-		highlight(string(1, grid[player % 2][x][y]), 224);
+		highlight(string(1, grid[player % 2 + playerOffset][x][y]), 224);
 }
 
 /// <summary>
@@ -274,7 +309,7 @@ void battleship::centerShips() {
 		setCursorPosition(53, 11 + i);
 		highlight(to_string(i + 1), 14);
 		cout << " ";
-		if (ships[player%2][i])
+		if (ships[player % 2 + playerOffset][i])
 			highlight(pieces[i], 2);
 		else
 			highlight(pieces[i], 12);
@@ -342,7 +377,7 @@ void battleship::place_pieces(int z) {
 						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
 					if (grid[player % 2][x][y] == '*' || set) {
 						rotate(x + i, y, pieces[z][i], 14);
-						ships[player%2][z] = false;
+						ships[player % 2][z] = false;
 						centerShips();
 						set = true;
 					}
@@ -363,7 +398,7 @@ void battleship::place_pieces(int z) {
 					if (grid[player % 2][x][y] == '*' || set) {
 						rotate(x, y + i, pieces[z][i], 14);
 						set = true;
-						ships[player%2][z] = false;
+						ships[player % 2][z] = false;
 						centerShips();
 					}
 				}
@@ -373,7 +408,7 @@ void battleship::place_pieces(int z) {
 				break;
 			}
 			else {
-					r++;
+				r++;
 			}
 		case 2: // x negative
 			if (pathfinder(-size, 0)) {
@@ -383,7 +418,7 @@ void battleship::place_pieces(int z) {
 					if (grid[player % 2][x][y] == '*' || set) {
 						rotate(x - i, y, pieces[z][i], 14);
 						set = true;
-						ships[player%2][z] = false;
+						ships[player % 2][z] = false;
 						centerShips();
 					}
 				}
@@ -398,12 +433,12 @@ void battleship::place_pieces(int z) {
 		case 3: // y negative
 			if (pathfinder(0, -size)) {
 				for (int i = 0; i < size; i++) {
-					if (lastLine[0] != 0 || lastLine[1] != 0){
+					if (lastLine[0] != 0 || lastLine[1] != 0) {
 						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
 					}
 					if (grid[player % 2][x][y] == '*' || set) {
 						rotate(x, y - i, pieces[z][i], 14);
-						ships[player%2][z] = false;
+						ships[player % 2][z] = false;
 						set = true;
 						centerShips();
 					}
@@ -457,15 +492,19 @@ void battleship::loadGame() {
 }
 
 void battleship::hit() {
-	if (grid[player % 2][x][y] != '*' && grid[player % 2][x][y] != 'X' && grid[player % 2][x][y] != 'O') {
-		grid[player % 2][x][y] = 'X';
-		setCursorPosition(x * 4 + 10, y * 2 + 4);
+	hitInt = 64;
+	playerOffset = 2;
+	if (grid[(player + 1) % 2][x][y] != '*' && grid[(player + 1) % 2][x][y] != 'X' && grid[(player + 1) % 2][x][y] != 'O') {
+		grid[player % 2 + playerOffset][x][y] = 'X';
+		grid[(player + 1) % 2][x][y] = 'X';
+		setCursorPosition(x * 4 + 74, y * 2 + 4);
 		highlight(string(1, 'X'), 12);
 		hits++;
 	}
-	else if (grid[player % 2][x][y] == '*') {
-		grid[player % 2][x][y] = 'O';
-		setCursorPosition(x * 4 + 10, y * 2 + 4);
+	else if (grid[(player + 1) % 2][x][y] == '*') {
+		grid[player % 2 + playerOffset][x][y] = 'O';
+		grid[(player + 1) % 2][x][y] = 'O';
+		setCursorPosition(x * 4 + 74, y * 2 + 4);
 		highlight(string(1, 'O'), 10);
 	}
 }
@@ -481,8 +520,16 @@ void battleship::win() {
 			for (int i = 0; i < 5; i++) {
 				ships[h][i] = true;
 			}
-			ships[h][6]=true;
+			ships[h][5] = false;
 		}
+		playerOffset = 0;
+		flag = true;
+		x = 0;
+		y = 0;
+		player = 0;
+		r = -1;
+		hits = 0;
+		hitInt = 0;
 		do {
 			cout << "Player X won the game, successfully hitting all the opponenets ships!\nWould you like to play again?\ny : yes\nn : no\n> "; // Add player 1 and two
 			cin >> loop;

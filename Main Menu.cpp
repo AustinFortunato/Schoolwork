@@ -9,7 +9,7 @@ int main() {
 	battleship b;
 
 	while (1) {
-		cout << "Select an option\nt: TicTacToe\nb: BattleShip\n>";
+		cout << "Select an option\nt: TicTacToe\nb: BattleShip\n> ";
 		cin >> menu;
 		switch (menu) {
 		case 't': {

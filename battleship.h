@@ -9,7 +9,7 @@ public:
 	char grid[4][10][10];
 	void print();
 	void highlight(std::string, int);
-	void move(char);
+	void move(char,int);
 	void place_pieces(int);
 	void setCursorPosition(int, int);
 	void initGrid();
