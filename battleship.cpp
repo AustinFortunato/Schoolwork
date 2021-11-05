@@ -20,8 +20,6 @@ using namespace std;
 #define KEY_FIVE 53
 #define KEY_H 104
 
-HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-CONSOLE_CURSOR_INFO cursorInfo;
 bool ships[2][6] = { {1,1,1,1,1,0}, {1,1,1,1,1,0} };
 int x = 0;
 int y = 0;
@@ -49,7 +47,7 @@ battleship::battleship() {
 	GetConsoleCursorInfo(out, &cursorInfo);
 	cursorInfo.bVisible = false;
 	SetConsoleCursorInfo(out, &cursorInfo);
-	x,y,player,hits,playerOffset,hitInt = 0;
+	x,y,player,hitsOne,hitsTwo,playerOffset,hitInt = 0;
 	r = -1;
 	flag = true;
 	for (int h = 0; h < 2; h++) {
@@ -519,13 +517,9 @@ void battleship::win() {
 			}
 			ships[h][5] = false;
 		}
-		playerOffset = 0;
 		flag = true;
-		x = 0;
-		y = 0;
-		player = 0;
 		r = -1;
-		x, y, player, hitsOne, hitsTwo, playerOffset, hitInt, cursorInfo.bVisible = 0;
+		x, y, player, hitsOne, hitsTwo, playerOffset, hitInt = 0;
 		do {
 			cout << "Player X won the game, successfully hitting all the opponenets ships!\nWould you like to play again?\ny : yes\nn : no\n> "; // Add player 1 and two
 			cin >> loop;
