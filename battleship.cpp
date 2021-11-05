@@ -20,18 +20,18 @@ using namespace std;
 #define KEY_FIVE 53
 #define KEY_H 104
 
+HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+CONSOLE_CURSOR_INFO cursorInfo;
+bool ships[2][6] = { {1,1,1,1,1,0}, {1,1,1,1,1,0} };
 int x = 0;
 int y = 0;
 int player = 0;
 int r = -1;
-int hits = 0;
+int hitsOne = 0;
+int hitsTwo = 0;
 int playerOffset = 0;
 int hitInt = 0;
-
-bool ships[2][6] = { {1,1,1,1,1,0}, {1,1,1,1,1,0} };
 bool flag = true;
-//hits1 = 0;
-//hits2 = 0;
 
 char pieces[5][7] = {
 	{'<','-','-','0','-','>'},
@@ -112,9 +112,11 @@ void battleship::startMenu() {
 		loadGame();
 		for (int h = 0; h < 2; h++) {
 			for (int i = 0; i < 5; i++) {
-				ships[h][i] = false;
+				ships[h][i] = true;
 			}
+			ships[h][5] = false;
 		}
+
 		break;
 	default:
 		cout << "\nError enter a valid choice\n";
@@ -172,7 +174,7 @@ void battleship::print() {
 /// This directs the users controls to the right function
 /// </summary>
 void battleship::functionController() {
-	bool flag = true;
+	bool flagF = true;
 	while (flag) { //hits1 < 23 && hits2 < 23
 		int input = _getch();
 		if (input != 224) {
@@ -218,7 +220,7 @@ void battleship::functionController() {
 					if (ships[player % 2][4]) {
 						place_pieces(5);
 						ships[player % 2][5] = false;
-						flag = false;
+						flagF = false;
 					}
 					break;
 				case KEY_H:
@@ -228,7 +230,7 @@ void battleship::functionController() {
 							if (ships[h][i] == false) {
 								hit();
 								//Sleep(120);
-								flag = false;
+								flagF = false;
 							}
 						}
 					}
@@ -488,7 +490,14 @@ void battleship::hit() {
 		grid[(player + 1) % 2][x][y] = 'X';
 		setCursorPosition(x * 4 + 74, y * 2 + 4);
 		highlight(string(1, 'X'), 12);
-		hits++;
+		switch (player % 2) {
+		case 0:
+			hitsOne++;
+			break;
+		case 1:
+			hitsTwo++;
+			break;
+		}
 	}
 	else if (grid[(player + 1) % 2][x][y] == '*') {
 		grid[player % 2 + playerOffset][x][y] = 'O';
@@ -500,9 +509,8 @@ void battleship::hit() {
 
 // Add a hits1 and hits 2 functionality to this
 void battleship::win() {
-	if (hits == 23) {
+	if (hitsOne == 23 || hitsTwo == 23) {
 		char loop;
-		hits = 0;
 		system("cls");
 		setCursorPosition(0, 0);
 		for (int h = 0; h < 2; h++) {
@@ -517,8 +525,7 @@ void battleship::win() {
 		y = 0;
 		player = 0;
 		r = -1;
-		hits = 0;
-		hitInt = 0;
+		x, y, player, hitsOne, hitsTwo, playerOffset, hitInt, cursorInfo.bVisible = 0;
 		do {
 			cout << "Player X won the game, successfully hitting all the opponenets ships!\nWould you like to play again?\ny : yes\nn : no\n> "; // Add player 1 and two
 			cin >> loop;
