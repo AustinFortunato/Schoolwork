@@ -23,13 +23,15 @@ int x = 0;
 int y = 0;
 int player = 0;
 int r = -1;
-bool ships[2][6] = { {true, true, true, true, true, false}, {true,true,true,true,true,false} };
 int hits = 0;
-bool flag = true;
 int playerOffset = 0;
 int hitInt = 0;
+
+bool ships[2][6] = { {1,1,1,1,1,0}, {1,1,1,1,1,0} };
+bool flag = true;
 //hits1 = 0;
 //hits2 = 0;
+
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 char pieces[5][7] = {
@@ -40,21 +42,13 @@ char pieces[5][7] = {
 	{'<','0','-','0','>'},
 };
 
-/// <summary>
-/// Initializer of battleship
-/// </summary>
+// Initializer of battleship
 battleship::battleship() {
 	CONSOLE_CURSOR_INFO cursorInfo;
 	GetConsoleCursorInfo(hConsole, &cursorInfo);
-	cursorInfo.bVisible = false;
-	x = 0;
-	y = 0;
-	player = 0;
+	x,y,player,hits,playerOffset,hitInt,cursorInfo.bVisible = 0;
 	r = -1;
-	hits = 0;
 	flag = true;
-	playerOffset = 0;
-	hitInt = 0;
 	for (int h = 0; h < 2; h++) {
 		for (int i = 0; i < 5; i++) {
 			ships[h][i] = true;
@@ -148,39 +142,26 @@ void battleship::print() {
 	highlight("\t\tTheir ships\n", 12);
 	cout << "-------------------------------------------------\t\t-------------------------------------------------\n|\t| A | B | C | D | E | F | G | H | I | J |\t\t|\t| A | B | C | D | E | F | G | H | I | J |\n|-------|---|---|---|---|---|---|---|---|---|---|\t\t|-------|---|---|---|---|---|---|---|---|---|---|\n";
 	for (int i = 0; i < 10; i++) {
-		cout << "|   " << i + 1 << "\t| ";
-		for (int b1 = 0; b1 < 10; b1++) {
-			if (grid[player % 2][b1][i] == '*') {
-				cout << grid[player % 2][b1][i];
+		for (int j = 0; j < 2; j++) {
+			cout << "|   " << i + 1 << "\t| ";
+			for (int b1 = 0; b1 < 10; b1++) {
+				switch (grid[player % 2][b1][i]) {
+					case '*':
+						cout << grid[player % 2][b1][i];
+						break;
+					case 'X':
+						highlight("X", 12);
+						break;
+					case 'O':
+						highlight("O", 10);
+					default:
+						highlight(string(1, grid[player % 2][b1][i]), 14);
+				}
+				cout << " | ";
 			}
-			else if (grid[player % 2][b1][i] == 'X') {
-				highlight("X", 12);
-			}
-			else if (grid[player % 2][b1][i] == 'O') {
-				highlight("O", 10);
-			}
-			else {
-				highlight(string(1, grid[player % 2][b1][i]), 14);
-			}
-			cout << " | ";
+			cout << "\t\t";
 		}
-		cout << "\t\t|   " << i + 1 << "\t| ";
-		for (int b2 = 0; b2 < 10; b2++) {
-			if (grid[player % 2 + 2][b2][i] == '*') {
-				cout << grid[player % 2 + 2][b2][i];
-			}
-			else if (grid[player % 2 + 2][b2][i] == 'X') {
-				highlight("X", 12);
-			}
-			else if (grid[player % 2 + 2][b2][i] == 'O') {
-				highlight("O", 10);
-			}
-			else {
-				highlight(string(1, grid[player % 2 + 2][b2][i]), 14);
-			}
-			cout << " | ";
-		}
-		cout << "\n|-------|---|---|---|---|---|---|---|---|---|---|\t\t|-------|---|---|---|---|---|---|---|---|---|---|\n";
+		cout << "|-------|---|---|---|---|---|---|---|---|---|---|\t\t|-------|---|---|---|---|---|---|---|---|---|---|\n";
 	}
 }
 
@@ -215,25 +196,29 @@ void battleship::functionController() {
 				case KEY_TWO:
 					if (ships[player % 2][1]) {
 						place_pieces(2);
-						break;
+						ships[player % 2][5] = false;
 					}
+					break;
 				case KEY_THREE:
 					if (ships[player % 2][2]) {
 						place_pieces(3);
-						break;
+						ships[player % 2][5] = false;
 					}
+					break;
 				case KEY_FOUR:
 					if (ships[player % 2][3]) {
 						place_pieces(4);
-						break;
+						ships[player % 2][5] = false;
 					}
+					break;
 				case KEY_FIVE:
 					if (ships[player % 2][4]) {
 						place_pieces(5);
-						flag = false;
-						break;
+						ships[player % 2][5] = false;
 					}
+					break;
 				case KEY_H:
+					flag = false;
 					for (int h = 0; h < 2; h++) {
 						for (int i = 0; i < 5; i++) {
 							if (ships[h][i] == false) {
