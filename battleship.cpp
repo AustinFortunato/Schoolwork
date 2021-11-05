@@ -32,8 +32,6 @@ bool flag = true;
 //hits1 = 0;
 //hits2 = 0;
 
-HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
 char pieces[5][7] = {
 	{'<','-','-','0','-','>'},
 	{'<','-','-','-','>'},
@@ -41,12 +39,11 @@ char pieces[5][7] = {
 	{'<','-','>'},
 	{'<','0','-','0','>'},
 };
+HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 // Initializer of battleship
 battleship::battleship() {
-	CONSOLE_CURSOR_INFO cursorInfo;
-	GetConsoleCursorInfo(hConsole, &cursorInfo);
-	x,y,player,hits,playerOffset,hitInt,cursorInfo.bVisible = 0;
+	x,y,player,hits,playerOffset,hitInt = 0;
 	r = -1;
 	flag = true;
 	for (int h = 0; h < 2; h++) {
