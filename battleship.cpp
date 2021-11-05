@@ -145,9 +145,9 @@ void battleship::print() {
 		for (int j = 0; j < 2; j++) {
 			cout << "|   " << i + 1 << "\t| ";
 			for (int b1 = 0; b1 < 10; b1++) {
-				switch (grid[player % 2][b1][i]) {
+				switch (grid[player % 2+(2*j)][b1][i]) {
 					case '*':
-						cout << grid[player % 2][b1][i];
+						cout << grid[player % 2+(2*j)][b1][i];
 						break;
 					case 'X':
 						highlight("X", 12);
@@ -155,7 +155,7 @@ void battleship::print() {
 					case 'O':
 						highlight("O", 10);
 					default:
-						highlight(string(1, grid[player % 2][b1][i]), 14);
+						highlight(string(1, grid[player % 2+(2*j)][b1][i]), 14);
 				}
 				cout << " | ";
 			}
@@ -215,6 +215,7 @@ void battleship::functionController() {
 					if (ships[player % 2][4]) {
 						place_pieces(5);
 						ships[player % 2][5] = false;
+						flag = false;
 					}
 					break;
 				case KEY_H:
