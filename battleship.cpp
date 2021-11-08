@@ -40,7 +40,9 @@ char pieces[5][7] = {
 };
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-// Initializer of battleship
+/// <summary>
+/// Initializes and sets global variables to default values
+/// </summary>
 battleship::battleship() {
 	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO cursorInfo;
@@ -321,6 +323,12 @@ void battleship::rotate(int eks, int why, char piece, int color) {
 	}
 }
 
+/// <summary>
+/// Checks to see if a path is clear
+/// </summary>
+/// <param name="eks"></param> X of the start path
+/// <param name="why"></param> Y of the start path
+/// <returns></returns>
 bool battleship::pathfinder(int eks, int why) {
 	int count = 1;
 	for (int i = 1; i < abs(eks + why); i++) {
@@ -480,6 +488,9 @@ void battleship::loadGame() {
 	save.close();
 }
 
+/// <summary>
+/// lets a player hit an opponents ships
+/// </summary>
 void battleship::hit() {
 	hitInt = 64;
 	playerOffset = 2;
@@ -505,7 +516,9 @@ void battleship::hit() {
 	}
 }
 
-// Add a hits1 and hits 2 functionality to this
+/// <summary>
+/// Allows a player to win then it will loop the program
+/// </summary>
 void battleship::win() {
 	if (hitsOne == 23 || hitsTwo == 23) {
 		char loop;
