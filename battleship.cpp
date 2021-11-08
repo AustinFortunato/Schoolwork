@@ -175,7 +175,7 @@ void battleship::print() {
 /// </summary>
 void battleship::functionController() {
 	bool flagF = true;
-	while (flag) { //hits1 < 23 && hits2 < 23
+	while (flagF) { //hits1 < 23 && hits2 < 23
 		int input = _getch();
 		if (input != 224) {
 			if (!(ships[player % 2][0] && ships[player % 2][1] && ships[player % 2][2] && ships[player % 2][3] && ships[player % 2][4] && ships[player % 2][5])) {
