@@ -196,24 +196,32 @@ void battleship::functionController() {
 					if (ships[player % 2][0]) {
 						place_pieces(1);
 						ships[player % 2][5] = false;
+						x = 0;
+						y = 0;
 					}
 					break;
 				case KEY_TWO:
 					if (ships[player % 2][1]) {
 						place_pieces(2);
 						ships[player % 2][5] = false;
+						x = 0;
+						y = 0;
 					}
 					break;
 				case KEY_THREE:
 					if (ships[player % 2][2]) {
 						place_pieces(3);
 						ships[player % 2][5] = false;
+						x = 0;
+						y = 0;
 					}
 					break;
 				case KEY_FOUR:
 					if (ships[player % 2][3]) {
 						place_pieces(4);
 						ships[player % 2][5] = false;
+						x = 0;
+						y = 0;
 					}
 					break;
 				case KEY_FIVE:
@@ -221,10 +229,11 @@ void battleship::functionController() {
 						place_pieces(5);
 						ships[player % 2][5] = false;
 						flagF = false;
+						x = 0;
+						y = 0;
 					}
 					break;
 				case KEY_H:
-					flag = false;
 					for (int h = 0; h < 2; h++) {
 						for (int i = 0; i < 5; i++) {
 							if (ships[h][i] == false) {
@@ -450,45 +459,6 @@ void battleship::place_pieces(int z) {
 }
 
 /// <summary>
-/// Saves the game board to be pulled up later
-/// </summary>
-void battleship::saveGame() {
-	string fName = "save.txt";
-	fstream save;
-	save.open(fName, ios::out);
-	if (save.is_open()) {
-		for (int a = 0; a < 4; a++) {
-			for (int b = 0; b < 10; b++) {
-				for (int c = 0; c < 10; c++) {
-					save << grid[a][c][b] << ' ';
-				}
-			}
-		}
-	}
-	save.close();
-	system("cls");
-}
-
-/// <summary>
-/// Pulls up a previously saved game board
-/// </summary>
-void battleship::loadGame() {
-	string fName = "save.txt";
-	fstream save;
-	save.open(fName, ios::in);
-	if (save.is_open()) {
-		for (int a = 0; a < 4; a++) {
-			for (int b = 0; b < 10; b++) {
-				for (int c = 0; c < 10; c++) {
-					save >> grid[a][c][b];
-				}
-			}
-		}
-	}
-	save.close();
-}
-
-/// <summary>
 /// lets a player hit an opponents ships
 /// </summary>
 void battleship::hit() {
@@ -548,6 +518,45 @@ void battleship::win() {
 			}
 		} while (loop != 'y' && loop != 'n');
 	}
+}
+
+/// <summary>
+/// Saves the game board to be pulled up later
+/// </summary>
+void battleship::saveGame() {
+	string fName = "save.txt";
+	fstream save;
+	save.open(fName, ios::out);
+	if (save.is_open()) {
+		for (int a = 0; a < 4; a++) {
+			for (int b = 0; b < 10; b++) {
+				for (int c = 0; c < 10; c++) {
+					save << grid[a][c][b] << ' ';
+				}
+			}
+		}
+	}
+	save.close();
+	system("cls");
+}
+
+/// <summary>
+/// Pulls up a previously saved game board
+/// </summary>
+void battleship::loadGame() {
+	string fName = "save.txt";
+	fstream save;
+	save.open(fName, ios::in);
+	if (save.is_open()) {
+		for (int a = 0; a < 4; a++) {
+			for (int b = 0; b < 10; b++) {
+				for (int c = 0; c < 10; c++) {
+					save >> grid[a][c][b];
+				}
+			}
+		}
+	}
+	save.close();
 }
 
 battleship::~battleship() {
