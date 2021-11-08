@@ -159,8 +159,10 @@ void battleship::print() {
 						break;
 					case 'O':
 						highlight("O", 10);
+						break;
 					default:
 						highlight(string(1, grid[player % 2+(2*j)][b1][i]), 14);
+						break;
 				}
 				cout << " | ";
 			}
@@ -231,6 +233,10 @@ void battleship::functionController() {
 						flagF = false;
 						x = 0;
 						y = 0;
+						if (player % 2) {
+							hitInt = 64;
+							playerOffset = 2;
+						}
 					}
 					break;
 				case KEY_H:
@@ -238,11 +244,13 @@ void battleship::functionController() {
 						for (int i = 0; i < 5; i++) {
 							if (ships[h][i] == false) {
 								hit();
-								//Sleep(120);
 								flagF = false;
+								Sleep(40);
 							}
 						}
 					}
+					x = 0;
+					y = 0;
 				}
 			}
 		}
@@ -309,7 +317,7 @@ void battleship::centerShips() {
 		setCursorPosition(53, 11 + i);
 		highlight(to_string(i + 1), 14);
 		cout << " ";
-		if (ships[player % 2 + playerOffset][i])
+		if (ships[player % 2][i])
 			highlight(pieces[i], 2);
 		else
 			highlight(pieces[i], 12);
