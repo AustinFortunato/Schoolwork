@@ -21,14 +21,8 @@ using namespace std;
 #define KEY_S 115
 
 bool ships[2][6] = { {1,1,1,1,1,0}, {1,1,1,1,1,0} };
-int x = 0;
-int y = 0;
-int player = 0;
+int x = 0,y=0,player=0,hitsOne=0,hitsTwo=0,playerOffset=0,hitInt=0;
 int r = -1;
-int hitsOne = 0;
-int hitsTwo = 0;
-int playerOffset = 0;
-int hitInt = 0;
 bool flag = true;
 
 char pieces[5][7] = {
