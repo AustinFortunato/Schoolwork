@@ -11,7 +11,7 @@ public:
 	void highlight(std::string, int);
 	void move(char,int);
 	void place_pieces(int);
-	void setCursorPosition(int, int);
+	static void setCursorPosition(int, int);
 	void initGrid();
 	void centerShips();
 	void rotate(int, int, char, int);
