@@ -236,9 +236,10 @@ void battleship::functionController() {
 				    if (flagF) {
                         hit();
                         flagF = false;
-                        Sleep(40);
+                        Sleep(300);
                     }
-					x = 0, y = x;
+					//x = 0, y = x;
+				    break;
 				case KEY_S:
 					system("cls");
 					setCursorPosition(0, 0);
@@ -333,7 +334,7 @@ void battleship::centerShips() {
 	setCursorPosition(50,12);
 	highlight("Numbers (1-5)", 9);
 	setCursorPosition(50,13);
-	highlight("to place ships",9);
+	highlight("to place ship",9);
 	setCursorPosition(52,15);
 	highlight("R to rotate",9);
 	setCursorPosition(53,17);
@@ -397,8 +398,9 @@ void battleship::place_pieces(int z) {
 	bool set = false;
 	int lastLine[2] = { 0,0 };
 	do {
+	    r = 0;
 	    bool breakCon = true;
-        while (breakCon) {
+        while (breakCon && r < 10) {
             r++;
             switch (r % 4) {
                 case 0: // x positive
