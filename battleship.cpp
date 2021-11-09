@@ -12,7 +12,6 @@ using namespace std;
 #define KEY_DOWN 80
 #define KEY_RIGHT 77
 #define KEY_LEFT 75
-#define KEY_ENTER 13
 #define KEY_ONE 49
 #define KEY_TWO 50
 #define KEY_THREE 51
