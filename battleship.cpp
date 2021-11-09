@@ -238,26 +238,19 @@ void battleship::functionController() {
                         flagF = false;
                         Sleep(40);
                     }
-					for (int h = 0; h < 2; h++) {
-						for (int i = 0; i < 5; i++) {
-							if (ships[h][i] == false) {
-								hit();
-								flagF = false;
-								Sleep(40);
-							}
-						}
-					}
 					x = 0, y = x;
 				case KEY_S:
 					system("cls");
 					setCursorPosition(0, 0);
 					saveGame();
-					string save = "Saving Game...";
-					for (int i = 0; i > 16; i++) {
-						Sleep(40);
-						highlight(&save[i], i);
+					for (int i = 0; i < 16; i++) {
+					    highlight("SAVING GAME...", i);
+                        Sleep(75);
+                        system("cls");
 					}
-					Sleep(100);
+					highlight("SAVED!", 6);
+					Sleep(950);
+					exit(3);
 				}
                 if (player % 2 && !flagF) {
                     hitInt = 64;
@@ -511,8 +504,8 @@ void battleship::hit() {
 		grid[(player + 1) % 2][x][y] = 'O';
 		setCursorPosition(x * 4 + 74, y * 2 + 4);
 		highlight(string(1, 'O'), 10);
-	} else if (grid[(player+1)%2][x][y] == 'O' || grid[(player+1)%2][x][y] == 'X') {
-	    hit();
+	} else if (grid[(player+1) % 2][x][y] == 'X' || grid[(player+1)%2][x][y] == 'O') {
+	    player--;
 	}
 }
 
