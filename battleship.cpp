@@ -232,16 +232,11 @@ void battleship::functionController() {
 					}
 					break;
 				case KEY_H:
-					for (int h = 0; h < 2; h++) {
-						for (int i = 0; i < 5; i++) {
-							if (ships[h][i] == false) {
-								hit();
-								flagF = false;
-								Sleep(40);
-							}
-						}
-					}
-					x = 0,y=x;
+				    if (flagF) {
+                        hit();
+                        flagF = false;
+                        Sleep(40);
+                    }
 				}
                 if (player % 2 && !flagF) {
                     hitInt = 64;
@@ -309,7 +304,7 @@ void battleship::centerShips() {
 	setCursorPosition(54, 9);
 	highlight("Ships", 14);
 	for (int i = 0; i < 5; i++) {
-		setCursorPosition(53, 11 + i);
+		setCursorPosition(53, 3 + i);
 		highlight(to_string(i + 1), 14);
 		cout << " ";
 		if (ships[player % 2][i])
@@ -317,7 +312,20 @@ void battleship::centerShips() {
 		else
 			highlight(pieces[i], 12);
 	}
-
+	setCursorPosition(50,9);
+	highlight("Arrow Keys to",9);
+	setCursorPosition(55,10);
+	highlight("Move.",9);
+	setCursorPosition(50,12);
+	highlight("Numbers (1-5)", 9);
+	setCursorPosition(50,13);
+	highlight("to place ships",9);
+	setCursorPosition(52,15);
+	highlight("R to rotate",9);
+	setCursorPosition(53,17);
+	highlight("H to hit",9);
+	setCursorPosition(52,19);
+	highlight("S to Save.", 13);
 }
 
 /// <summary>
@@ -372,93 +380,96 @@ void battleship::place_pieces(int z) {
 	setCursorPosition(0, 24);
 	z--;
 	int size = strlen(pieces[z]);
-	bool tmp = false;
-	bool temp = false;
 	bool set = false;
 	int lastLine[2] = { 0,0 };
-	while (_getch() == 'r') {
-		r++;
-		switch (r % 4) {
-		case 0: // x positive
-			if (pathfinder(size, 0)) {
-				for (int i = 0; i < size; i++) {
-					if (lastLine[0] != 0 || lastLine[1] != 0)
-						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
-					if (grid[player % 2][x][y] == '*' || set) {
-						rotate(x + i, y, pieces[z][i], 14);
-						ships[player % 2][z] = false;
-						centerShips();
-						set = true;
-					}
-				}
-				lastLine[0] = 1;
-				lastLine[1] = 0;
-				set = false;
-				break;
-			}
-			else {
-				r++;
-			}
-		case 1: // y positive
-			if (pathfinder(0, size)) {
-				for (int i = 0; i < size; i++) {
-					if (lastLine[0] != 0 || lastLine[1] != 0)
-						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
-					if (grid[player % 2][x][y] == '*' || set) {
-						rotate(x, y + i, pieces[z][i], 14);
-						set = true;
-						ships[player % 2][z] = false;
-						centerShips();
-					}
-				}
-				lastLine[0] = 0;
-				lastLine[1] = 1;
-				set = false;
-				break;
-			}
-			else {
-				r++;
-			}
-		case 2: // x negative
-			if (pathfinder(-size, 0)) {
-				for (int i = 0; i < size; i++) {
-					if (lastLine[0] != 0 || lastLine[1] != 0)
-						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
-					if (grid[player % 2][x][y] == '*' || set) {
-						rotate(x - i, y, pieces[z][i], 14);
-						set = true;
-						ships[player % 2][z] = false;
-						centerShips();
-					}
-				}
-				lastLine[0] = -1;
-				lastLine[1] = 0;
-				set = false;
-				break;
-			}
-			else {
-				r++;
-			}
-		case 3: // y negative
-			if (pathfinder(0, -size)) {
-				for (int i = 0; i < size; i++) {
-					if (lastLine[0] != 0 || lastLine[1] != 0) {
-						rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
-					}
-					if (grid[player % 2][x][y] == '*' || set) {
-						rotate(x, y - i, pieces[z][i], 14);
-						ships[player % 2][z] = false;
-						set = true;
-						centerShips();
-					}
-				}
-				lastLine[0] = 0;
-				lastLine[1] = -1;
-				set = false;
-				break;
-			}
-		}
-	}
+	do {
+	    bool breakCon = true;
+        while (breakCon) {
+            r++;
+            switch (r % 4) {
+                case 0: // x positive
+                    if (pathfinder(size, 0)) {
+                        breakCon = false;
+                        for (int i = 0; i < size; i++) {
+                            if (lastLine[0] != 0 || lastLine[1] != 0)
+                                rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
+                            if (grid[player % 2][x][y] == '*' || set) {
+                                rotate(x + i, y, pieces[z][i], 14);
+                                ships[player % 2][z] = false;
+                                centerShips();
+                                set = true;
+                            }
+                        }
+                        lastLine[0] = 1;
+                        lastLine[1] = 0;
+                        set = false;
+                        break;
+                    } else {
+                        r++;
+                    }
+                case 1: // y positive
+                    if (pathfinder(0, size)) {
+                        breakCon = false;
+                        for (int i = 0; i < size; i++) {
+                            if (lastLine[0] != 0 || lastLine[1] != 0)
+                                rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
+                            if (grid[player % 2][x][y] == '*' || set) {
+                                rotate(x, y + i, pieces[z][i], 14);
+                                set = true;
+                                ships[player % 2][z] = false;
+                                centerShips();
+                            }
+                        }
+                        lastLine[0] = 0;
+                        lastLine[1] = 1;
+                        set = false;
+                        break;
+                    } else {
+                        r++;
+                    }
+                case 2: // x negative
+                    if (pathfinder(-size, 0)) {
+                        breakCon = false;
+                        for (int i = 0; i < size; i++) {
+                            if (lastLine[0] != 0 || lastLine[1] != 0)
+                                rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
+                            if (grid[player % 2][x][y] == '*' || set) {
+                                rotate(x - i, y, pieces[z][i], 14);
+                                set = true;
+                                ships[player % 2][z] = false;
+                                centerShips();
+                            }
+                        }
+                        lastLine[0] = -1;
+                        lastLine[1] = 0;
+                        set = false;
+                        break;
+                    } else {
+                        r++;
+                    }
+                case 3: // y negative
+                    if (pathfinder(0, -size)) {
+                        breakCon = false;
+                        for (int i = 0; i < size; i++) {
+                            if (lastLine[0] != 0 || lastLine[1] != 0) {
+                                rotate(x + lastLine[0] * i, y + lastLine[1] * i, '*', 7);
+                            }
+                            if (grid[player % 2][x][y] == '*' || set) {
+                                rotate(x, y - i, pieces[z][i], 14);
+                                ships[player % 2][z] = false;
+                                set = true;
+                                centerShips();
+                            }
+                        }
+                        lastLine[0] = 0;
+                        lastLine[1] = -1;
+                        set = false;
+                        break;
+                    }
+            }
+        }
+    }
+    while (_getch() == 'r');
 }
 
 /// <summary>
@@ -472,20 +483,15 @@ void battleship::hit() {
 		grid[(player + 1) % 2][x][y] = 'X';
 		setCursorPosition(x * 4 + 74, y * 2 + 4);
 		highlight(string(1, 'X'), 12);
-		switch (player % 2) {
-		case 0:
-			hitsOne++;
-			break;
-		case 1:
-			hitsTwo++;
-			break;
-		}
+        player % 2 ? hitsOne++ : hitsTwo++;
 	}
 	else if (grid[(player + 1) % 2][x][y] == '*') {
 		grid[player % 2 + playerOffset][x][y] = 'O';
 		grid[(player + 1) % 2][x][y] = 'O';
 		setCursorPosition(x * 4 + 74, y * 2 + 4);
 		highlight(string(1, 'O'), 10);
+	} else if (grid[(player+1)%2][x][y] == 'O' || grid[(player+1)%2][x][y] == 'X') {
+	    hit();
 	}
 }
 
@@ -505,7 +511,7 @@ void battleship::win() {
 		}
 		flag = true;
 		r = -1;
-		x, y, player, hitsOne, hitsTwo, playerOffset, hitInt = 0;
+		x=0, y=x, player=x, hitsOne=x, hitsTwo=x, playerOffset=x, hitInt=x;
 		do {
 			cout << "Player X won the game, successfully hitting all the opponenets ships!\nWould you like to play again?\ny : yes\nn : no\n> "; // Add player 1 and two
 			cin >> loop;
