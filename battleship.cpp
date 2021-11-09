@@ -12,7 +12,6 @@ using namespace std;
 #define KEY_DOWN 80
 #define KEY_RIGHT 77
 #define KEY_LEFT 75
-#define KEY_ENTER 13
 #define KEY_ONE 49
 #define KEY_TWO 50
 #define KEY_THREE 51
@@ -22,14 +21,8 @@ using namespace std;
 #define KEY_S 115
 
 bool ships[2][6] = { {1,1,1,1,1,0}, {1,1,1,1,1,0} };
-int x = 0;
-int y = 0;
-int player = 0;
+int x = 0,y=0,player=0,hitsOne=0,hitsTwo=0,playerOffset=0,hitInt=0;
 int r = -1;
-int hitsOne = 0;
-int hitsTwo = 0;
-int playerOffset = 0;
-int hitInt = 0;
 bool flag = true;
 
 char pieces[5][7] = {
@@ -236,9 +229,10 @@ void battleship::functionController() {
 				    if (flagF) {
                         hit();
                         flagF = false;
-                        Sleep(40);
+                        Sleep(300);
                     }
-					x = 0, y = x;
+					//x = 0, y = x;
+				    break;
 				case KEY_S:
 					system("cls");
 					setCursorPosition(0, 0);
@@ -333,7 +327,7 @@ void battleship::centerShips() {
 	setCursorPosition(50,12);
 	highlight("Numbers (1-5)", 9);
 	setCursorPosition(50,13);
-	highlight("to place ships",9);
+	highlight("to place ship",9);
 	setCursorPosition(52,15);
 	highlight("R to rotate",9);
 	setCursorPosition(53,17);
@@ -397,8 +391,9 @@ void battleship::place_pieces(int z) {
 	bool set = false;
 	int lastLine[2] = { 0,0 };
 	do {
+	    r = 0;
 	    bool breakCon = true;
-        while (breakCon) {
+        while (breakCon && r < 10) {
             r++;
             switch (r % 4) {
                 case 0: // x positive
