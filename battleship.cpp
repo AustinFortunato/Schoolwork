@@ -19,6 +19,7 @@ using namespace std;
 #define KEY_FOUR 52
 #define KEY_FIVE 53
 #define KEY_H 104
+#define KEY_S 115
 
 bool ships[2][6] = { {1,1,1,1,1,0}, {1,1,1,1,1,0} };
 int x = 0;
@@ -183,7 +184,7 @@ void battleship::functionController() {
 		if (input != 224) {
 		    // TODO Make rotate auto place when r is pressed.
 			if (!(ships[player % 2][0] && ships[player % 2][1] && ships[player % 2][2] && ships[player % 2][3] && ships[player % 2][4] && ships[player % 2][5])) {
-			    switch (input) {
+				switch (input) {
 				case KEY_UP:
 					move('u', hitInt);
 					break;
@@ -200,35 +201,35 @@ void battleship::functionController() {
 					if (ships[player % 2][0]) {
 						place_pieces(1);
 						ships[player % 2][5] = false;
-                        flagF = (ships[player%2][0] || ships[player%2][1] || ships[player%2][2] || ships[player%2][3] || ships[player%2][4]);
+						flagF = (ships[player % 2][0] || ships[player % 2][1] || ships[player % 2][2] || ships[player % 2][3] || ships[player % 2][4]);
 					}
 					break;
 				case KEY_TWO:
 					if (ships[player % 2][1]) {
 						place_pieces(2);
 						ships[player % 2][5] = false;
-                        flagF = (ships[player%2][0] || ships[player%2][1] || ships[player%2][2] || ships[player%2][3] || ships[player%2][4]);
+						flagF = (ships[player % 2][0] || ships[player % 2][1] || ships[player % 2][2] || ships[player % 2][3] || ships[player % 2][4]);
 					}
 					break;
 				case KEY_THREE:
 					if (ships[player % 2][2]) {
 						place_pieces(3);
 						ships[player % 2][5] = false;
-                        flagF = (ships[player%2][0] || ships[player%2][1] || ships[player%2][2] || ships[player%2][3] || ships[player%2][4]);
+						flagF = (ships[player % 2][0] || ships[player % 2][1] || ships[player % 2][2] || ships[player % 2][3] || ships[player % 2][4]);
 					}
 					break;
 				case KEY_FOUR:
 					if (ships[player % 2][3]) {
 						place_pieces(4);
 						ships[player % 2][5] = false;
-                        flagF = (ships[player%2][0] || ships[player%2][1] || ships[player%2][2] || ships[player%2][3] || ships[player%2][4]);
+						flagF = (ships[player % 2][0] || ships[player % 2][1] || ships[player % 2][2] || ships[player % 2][3] || ships[player % 2][4]);
 					}
 					break;
 				case KEY_FIVE:
 					if (ships[player % 2][4]) {
 						place_pieces(5);
 						ships[player % 2][5] = false;
-                        flagF = (ships[player%2][0] || ships[player%2][1] || ships[player%2][2] || ships[player%2][3] || ships[player%2][4]);
+						flagF = (ships[player % 2][0] || ships[player % 2][1] || ships[player % 2][2] || ships[player % 2][3] || ships[player % 2][4]);
 					}
 					break;
 				case KEY_H:
@@ -237,6 +238,26 @@ void battleship::functionController() {
                         flagF = false;
                         Sleep(40);
                     }
+					for (int h = 0; h < 2; h++) {
+						for (int i = 0; i < 5; i++) {
+							if (ships[h][i] == false) {
+								hit();
+								flagF = false;
+								Sleep(40);
+							}
+						}
+					}
+					x = 0, y = x;
+				case KEY_S:
+					system("cls");
+					setCursorPosition(0, 0);
+					saveGame();
+					string save = "Saving Game...";
+					for (int i = 0; i > 16; i++) {
+						Sleep(40);
+						highlight(&save[i], i);
+					}
+					Sleep(100);
 				}
                 if (player % 2 && !flagF) {
                     hitInt = 64;
