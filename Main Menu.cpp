@@ -18,7 +18,7 @@ int main() {
 
     tictactoe ttt;
     battleship b;
-    tetris tet;
+    //tetris tet;
 
 	while (1) {
 		cout << "Select an option:\n";
