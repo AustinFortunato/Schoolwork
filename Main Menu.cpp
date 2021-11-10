@@ -21,6 +21,7 @@ int main() {
     //tetris tet;
 
 	while (1) {
+        b.setCursorPosition(0,0);
 		cout << "Select an option:\n";
         for(int index = 0; index < SELECTION_SIZE; index++) {
             cout << selection[index] << "\n";
