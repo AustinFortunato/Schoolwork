@@ -12,7 +12,7 @@ tictactoe::tictactoe()
 	}
 }
 
-void tictactoe::tttmain() {
+void tictactoe::main() {
 	int x = 2;
 	int movez = 0;
 	int player = 2;

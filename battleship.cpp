@@ -81,7 +81,7 @@ void battleship::highlight(string text, int color) {
 /// <summary>
 /// Original Series of functions
 /// </summary>
-void battleship::bsmain() {
+void battleship::main() {
 	startMenu();
 	while (flag) {
 		print();
@@ -517,7 +517,7 @@ void battleship::win() {
 			cin >> loop;
 			switch (loop) {
 			case 'y':
-				bsmain();
+				main();
 				break;
 			case 'n':
 				flag = false;
@@ -546,7 +546,6 @@ void battleship::saveGame() {
 		}
 	}
 	save.close();
-	system("cls");
 }
 
 /// <summary>

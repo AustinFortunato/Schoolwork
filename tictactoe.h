@@ -3,7 +3,7 @@ class tictactoe
 {
 public:
 	tictactoe();
-	void tttmain();
+	void main();
 	char grid[3][3];
 	void print();
 	int move(int,int);

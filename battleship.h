@@ -4,7 +4,7 @@ class battleship
 {
 public:
 	battleship();
-	void bsmain();
+	void main();
 	void startMenu();
 	char grid[4][10][10];
 	void print();
