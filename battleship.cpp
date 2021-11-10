@@ -89,7 +89,6 @@ void battleship::bsmain() {
 		functionController();
 		player++;
 	}
-	saveGame();
 }
 
 /// <summary>
@@ -175,7 +174,6 @@ void battleship::functionController() {
 	while (flagF) { //hits1 < 23 && hits2 < 23
 		int input = _getch();
 		if (input != 224) {
-		    // TODO Make rotate auto place when r is pressed.
 			if (!(ships[player % 2][0] && ships[player % 2][1] && ships[player % 2][2] && ships[player % 2][3] && ships[player % 2][4] && ships[player % 2][5])) {
 				switch (input) {
 				case KEY_UP:
@@ -231,16 +229,17 @@ void battleship::functionController() {
                         flagF = false;
                         Sleep(300);
                     }
-					//x = 0, y = x;
 				    break;
 				case KEY_S:
 					system("cls");
 					setCursorPosition(0, 0);
 					saveGame();
-					for (int i = 0; i < 16; i++) {
-					    highlight("SAVING GAME...", i);
-                        Sleep(75);
-                        system("cls");
+                    char s[15] = {'S', 'A','V','I','N','G',' ','G','A','M','E','.','.','.'};
+					for (int i = 1; i < 16; i++) {
+					    for (int j = 0; j < 15; j++) {
+                            highlight(&s[j], i);
+                            system("cls");
+                        }
 					}
 					highlight("SAVED!", 6);
 					Sleep(950);
@@ -273,24 +272,16 @@ void battleship::move(char m, int xOffSet) {
 		highlight(string(1, grid[player % 2 + playerOffset][x][y]), 14);
 	switch (m) {
 	case 'u':
-		if (y > 0) {
-			y--;
-		}
+	    y > 0 ? y-- : y;
 		break;
 	case 'd':
-		if (y < 9) {
-			y++;
-		}
+	    y < 9 ? y++ : y;
 		break;
 	case 'l':
-		if (x > 0) {
-			x--;
-		}
+	    x > 0 ? x-- : x;
 		break;
 	case 'r':
-		if (x < 9) {
-			x++;
-		}
+	    x < 9 ? x++ : x;
 		break;
 	}
 	setCursorPosition((x * 4) + xOffSet + 10, (y * 2) + 4);

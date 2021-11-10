@@ -449,3 +449,7 @@ vs/
 *.vcxproj
 *.filters
 save.txt
+
+CMakeLists.txt
+
+cmake-build-debug/Schoolwork.cbp
