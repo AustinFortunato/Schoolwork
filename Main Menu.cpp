@@ -52,6 +52,7 @@ int main() {
                 b.highlight(selection[y], 112);
             }
         }
+        system("Cls");
         switch (y+1) {
             case 1: {
                 cout << "Battleship\n";
