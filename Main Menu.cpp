@@ -9,6 +9,7 @@
 #define SELECTION_SIZE 4
 
 using namespace std;
+class ActiveGame;
 
 int main() {
 	int menu;
@@ -80,4 +81,9 @@ int main() {
 		}
 	}
 }
+
+class ActiveGame {
+
+};
+
 #pragma clang diagnostic pop
