@@ -34,6 +34,8 @@ public:
     ~activeGame();
 };
 
+void fraction();
+
 int main() {
     int y = 0;
     int get = 72;
@@ -42,7 +44,6 @@ int main() {
     tictactoe ttt;
     battleship b;
     activeGame tet;
-    fractions f;
     general gen;
 
     while (1) {
@@ -98,8 +99,7 @@ int main() {
                 break;
             }
             case 4: {
-                f.main();
-                f = fractions();
+                fraction();
                 break;
             }
             case 5: {
@@ -593,9 +593,7 @@ void activeGame::shadow(int piece[4][4], int eks, int why) {
     draw(piece, eks, final, false);
 }
 
-activeGame::~activeGame() {
-
-}
+activeGame::~activeGame() = default;
 
 void fraction() {
     int a,b,c,d,e,f;
@@ -621,7 +619,7 @@ void fraction() {
 
     switch (choice) {
         case 'a':
-            fractions::fractionadd(a,b,c,d,&e,&f);
+            fractionadd(a,b,c,d,&e,&f);
             fractionsimp(&e, &f);
             break;
         case 's':
@@ -643,8 +641,6 @@ void fraction() {
         cout << e*-1 << "/" << f*-1 << endl;
     } else
         cout << e << "/" << f << endl;
-    int waste = 0;
     cout << "PRESS ANY KEY TO CONTINUE";
     _getch();
-    }
 }
