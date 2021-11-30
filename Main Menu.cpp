@@ -596,3 +596,55 @@ void activeGame::shadow(int piece[4][4], int eks, int why) {
 activeGame::~activeGame() {
 
 }
+
+void fraction() {
+    int a,b,c,d,e,f;
+    char choice;
+    cout << "FRACTION ONE:\nNumerator > ";
+    cin >> a;
+    cout << "\nDenominator > ";
+    cin >> b;
+    cout << "\nFRACTION TWO:\nNumerator > ";
+    cin >> c;
+    cout << "\nDenominator > ";
+    cin >> d;
+    cout << "ADD (a) SUBTRACT (s) MULTIPLY (m) DIVIDE (d)";
+    cin >> choice;
+    if (b==0 || a==0) {
+        a = 0;
+        b = 1;
+    }
+    if (d==0 || c==0) {
+        c = 0;
+        d = 1;
+    }
+
+    switch (choice) {
+        case 'a':
+            fractions::fractionadd(a,b,c,d,&e,&f);
+            fractionsimp(&e, &f);
+            break;
+        case 's':
+            fractionsub(a,b,c,d,&e,&f);
+            fractionsimp(&e, &f);
+            break;
+        case 'm':
+            fractionply(a,b,c,d,&e,&f);
+            fractionsimp(&e, &f);
+            break;
+        case 'd':
+            fractiondiv(a,b,c,d,&e,&f);
+            fractionsimp(&e, &f);
+            break;
+    }
+    if (e==f)
+        cout << e << endl;
+    else if (e >= 0 && f < 0) {
+        cout << e*-1 << "/" << f*-1 << endl;
+    } else
+        cout << e << "/" << f << endl;
+    int waste = 0;
+    cout << "PRESS ANY KEY TO CONTINUE";
+    _getch();
+    }
+}
