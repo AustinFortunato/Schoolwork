@@ -1,6 +1,7 @@
 #include"tictactoe.h"
 #include"battleship.h"
 #include"fractions.h"
+#include"general.h"
 #include<iostream>
 #include<conio.h>
 #include<Windows.h>
@@ -42,39 +43,40 @@ int main() {
     battleship b;
     activeGame tet;
     fractions f;
+    general gen;
 
     while (1) {
         system("cls");
-        b.setCursorPosition(0,0);
+        gen.setCursorPosition(0,0);
         cout << "Select an option:\n";
         for(int index = 0; index < SELECTION_SIZE; index++) {
             cout << selection[index] << "\n";
         }
-        b.setCursorPosition(0, y+1);
-        b.highlight(selection[y], 112);
+        gen.setCursorPosition(0, y+1);
+        gen.highlight(selection[y], 112);
         get = 0;
         while(get != 13) {
             get = _getch();
             if (get != 224) {
-                b.setCursorPosition(0,y+1);
+                gen.setCursorPosition(0,y+1);
                 switch (get) {
                     case 72: // Up
                         if (y > 0) {
-                            b.highlight(selection[y], 7);
+                            gen.highlight(selection[y], 7);
                             y--;
                             break;
                         }
                     case 80: // Down
                         if (y < SELECTION_SIZE - 1) {
-                            b.highlight(selection[y], 7);
+                            gen.highlight(selection[y], 7);
                             y++;
                             break;
                         }
                     case 13:
                         break;
                 }
-                b.setCursorPosition(0, y+1);
-                b.highlight(selection[y], 112);
+                gen.setCursorPosition(0, y+1);
+                gen.highlight(selection[y], 112);
             }
         }
         system("Cls");
