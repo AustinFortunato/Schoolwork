@@ -2,6 +2,7 @@
 #include"battleship.h"
 #include"fractions.h"
 #include"general.h"
+#include "lunchLine.h"
 #include<iostream>
 #include<conio.h>
 #include<Windows.h>
@@ -10,7 +11,7 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
 
-#define SELECTION_SIZE 5
+#define SELECTION_SIZE 6
 
 using namespace std;
 class activeGame
@@ -39,12 +40,13 @@ void fraction();
 int main() {
     int y = 0;
     int get = 72;
-    string selection[SELECTION_SIZE] = {"1: TicTacToe", "2: BattleShip", "3: Tetris", "4: Fractions", "5: Exit"};
+    string selection[SELECTION_SIZE] = {"1: TicTacToe", "2: BattleShip", "3: Tetris", "4: Fractions", "5: Lunch Line", "5: Exit"};
 
     tictactoe ttt;
     battleship b;
     activeGame tet;
     general gen;
+    lunchLine lunch;
 
     while (1) {
         system("cls");
@@ -103,6 +105,11 @@ int main() {
                 break;
             }
             case 5: {
+                lunch.main();
+                lunch = lunchLine();
+                break;
+            };
+            case 6: {
                 cout << "Goodbye!\n";
                 return EXIT_SUCCESS;
             }
